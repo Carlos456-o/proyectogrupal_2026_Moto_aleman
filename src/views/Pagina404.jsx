@@ -6,7 +6,7 @@ const Pagina404 = () => {
     <Container className="mt-3">
       <Row className="align-items-center">
         <Col>
-          <h2><i className="bi bi-house-fill me-2"></i> Inicio</h2>
+          <h2><i className="bi bi-house-fill me-2"></i> Pagina404</h2>
         </Col>
       </Row>
     </Container>
