@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import React from "react";
+import { Form, InputGroup } from "react-bootstrap";
 
-const CuadroBusquedas = () => {
+const CuadroBusquedas = ({ textoBusqueda, manejarCambioBusqueda }) => {
   return (
-    <Container className="mt-3">
-      <Row className="align-items-center">
-        <Col>
-          <h2><i className="bi bi-house-fill me-2"></i> CuadroBusquedas</h2>
-        </Col>
-      </Row>
-    </Container>
+    <InputGroup style={{ width: "100%", borderRadius: "0.375rem" }} className="shadow-sm">
+      <InputGroup.Text>
+        <i className="bi bi-search"></i>
+      </InputGroup.Text>
+      <Form.Control
+        type="text"
+        placeholder="Buscar..."
+        value={textoBusqueda}
+        onChange={manejarCambioBusqueda}
+      />
+    </InputGroup>
   );
 };
 

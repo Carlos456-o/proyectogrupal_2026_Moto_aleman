@@ -29,11 +29,11 @@ return (
     <Modal.Body>
       <Form>
         <Form.Group className="mb-3">
-          <Form.Label>Nombre1</Form.Label>
+          <Form.Label>Nombre1 *</Form.Label>
           <Form.Control
             type="text"
-            name="Nombre1"
-            value={nuevoCliente.Nombre1}
+            name="nombre1"
+            value={nuevoCliente.nombre1}
             onChange={manejoCambioInput}
             placeholder="Ingresa el primer nombre"
           />
@@ -41,43 +41,39 @@ return (
         <Form.Group className="mb-3">
           <Form.Label>Nombre2</Form.Label>
           <Form.Control
-            as="textarea"
-            rows={3}
-            name="Nombre2"
-            value={nuevoCliente.Nombre2}
+            type="text"
+            name="nombre2"
+            value={nuevoCliente.nombre2}
             onChange={manejoCambioInput}
             placeholder="Ingresa el segundo nombre"
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Apellido1</Form.Label>
+          <Form.Label>Apellidos1 *</Form.Label>
           <Form.Control
-            as="textarea"
-            rows={3}
-            name="Apellido1"
-            value={nuevoCliente.Apellido1}
+            type="text"
+            name="apellidos1"
+            value={nuevoCliente.apellidos1}
             onChange={manejoCambioInput}
             placeholder="Ingresa el primer apellido"
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Apellido2</Form.Label>
+          <Form.Label>Apellidos2</Form.Label>
           <Form.Control
-            as="textarea"
-            rows={3}
-            name="Apellido2"
-            value={nuevoCliente.Apellido2}
+            type="text"
+            name="apellidos2"
+            value={nuevoCliente.apellidos2}
             onChange={manejoCambioInput}
             placeholder="Ingresa el segundo apellido"
           />
         </Form.Group>
         <Form.Group className="mb-3">
-          <Form.Label>Cedula</Form.Label>
+          <Form.Label>Cédula</Form.Label>
           <Form.Control
-            as="textarea"
-            rows={3}
-            name="Cedula"
-            value={nuevoCliente.Cedula}
+            type="text"
+            name="cedula"
+            value={nuevoCliente.cedula}
             onChange={manejoCambioInput}
             placeholder="Ingresa la cédula"
           />
@@ -91,7 +87,7 @@ return (
       <Button
         variant="primary"
         onClick={handleRegistrar}
-        disabled={nuevoCliente.Nombre1.trim() === "" || deshabilitado}
+        disabled={!nuevoCliente.nombre1.trim() || !nuevoCliente.apellidos1.trim() || deshabilitado}
       >
         Guardar
       </Button>

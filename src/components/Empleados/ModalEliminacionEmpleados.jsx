@@ -1,16 +1,54 @@
-import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import React, { useState } from "react";
+import { Modal, Button } from "react-bootstrap";
 
-const Inicio = () => {
+const ModalEliminacionEmpleado = ({
+  mostrarModalEliminacion,
+  setMostrarModalEliminacion,
+  eliminarEmpleado,
+  empleado,
+}) => {
+  const [deshabilitado, setDeshabilitado] = useState(false);
+
+const handlEliminar = async () => {
+  if (deshabilitado) return;
+  setDeshabilitado(true);
+  await eliminarEmpleado();
+  setDeshabilitado(false);
+};
+
   return (
-    <Container className="mt-3">
-      <Row className="align-items-center">
-        <Col>
-          <h2><i className="bi bi-house-fill me-2"></i> Inicio</h2>
-        </Col>
-      </Row>
-    </Container>
+    // código del componente
+    <Modal
+  show={mostrarModalEliminacion}
+  onHide={() => setMostrarModalEliminacion(false)}
+  backdrop="static"
+  keyboard={false}
+  centered
+>
+  <Modal.Header closeButton>
+    <Modal.Title>Confirmar Eliminación</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    ¿Estás seguro de que deseas eliminar el empleado "<strong>{empleado?.nombre}</strong>"?
+  </Modal.Body>
+  <Modal.Footer>
+    <Button
+      variant="secondary"
+      onClick={() => setMostrarModalEliminacion(false)}
+    >
+      Cancelar
+    </Button>
+    <Button
+      variant="danger"
+      onClick={handlEliminar}
+      disabled={deshabilitado}
+    >
+      Eliminar
+    </Button>
+  </Modal.Footer>
+</Modal>
+
   );
 };
 
-export default Inicio;
+export default ModalEliminacionEmpleado;

@@ -58,10 +58,10 @@ const Encabezado = () => {
     contenidoMenu = (
       <Nav className="ms-auto pe-2">
         <Nav.Link
-          onClick={() => manejarNavegacion('/')}
+          onClick={() => manejarNavegacion('/clientes')}
           className={mostrarMenu ? 'color-texto-marca' : 'text-black'}
         >
-          {mostrarMenu ? <i className="bi-house-fill me-2"></i> : null} <strong>Clientes</strong>
+          {mostrarMenu ? <i className="bi-person-fill me-2"></i> : null} <strong>Clientes</strong>
         </Nav.Link>
         <Nav.Link
           onClick={() => manejarNavegacion('/empleados')}
@@ -119,7 +119,7 @@ const Encabezado = () => {
           onHide={() => setMostrarMenu(false)}
         >
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Menú Discosa</Offcanvas.Title>
+            <Offcanvas.Title>Menú RevPartsPro</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             {contenidoMenu}
