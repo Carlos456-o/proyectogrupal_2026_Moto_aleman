@@ -7,9 +7,9 @@ const ModalRegistroProducto = ({
   nuevoProducto,
   manejoCambioInput,
   agregarProducto,
-}) => 
-  {const [deshabilitado, setDeshabilitado] = useState(false);
-  
+}) => {
+  const [deshabilitado, setDeshabilitado] = useState(false);
+
   const handleRegistrar = async () => {
     if (deshabilitado) return;
     setDeshabilitado(true);
@@ -30,22 +30,22 @@ const ModalRegistroProducto = ({
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3">
-            <Form.Label>Nombre_P</Form.Label>
+            <Form.Label>Nombre</Form.Label>
             <Form.Control
               type="text"
-              name="Nombre_P"
-              value={nuevoCliente.Nombre_P}
+              name="nombre_p"
+              value={nuevoProducto.nombre_p}
               onChange={manejoCambioInput}
               placeholder="Ingresa el nombre del producto"
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Descripcion</Form.Label>
+            <Form.Label>Descripción</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
-              name="Descripcion"
-              value={nuevoCliente.Descripcion}
+              name="descripcion"
+              value={nuevoProducto.descripcion}
               onChange={manejoCambioInput}
               placeholder="Ingresa la descripción del producto"
             />
@@ -53,43 +53,40 @@ const ModalRegistroProducto = ({
           <Form.Group className="mb-3">
             <Form.Label>Cantidad</Form.Label>
             <Form.Control
-              as="textarea"
-              rows={3}
-              name="Cantidad"
-              value={nuevoCliente.Cantidad}
+              type="number"
+              name="cantidad"
+              value={nuevoProducto.cantidad}
               onChange={manejoCambioInput}
               placeholder="Ingresa la cantidad del producto"
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>Disponible</Form.Label>
-            <Form.Control
-              as="radio"
-              rows={3}
-              name="Disponible"
-              value={nuevoCliente.Disponible}
+            <Form.Check
+              type="checkbox"
+              label="Disponible"
+              name="disponible"
+              checked={nuevoProducto.disponible}
               onChange={manejoCambioInput}
-              placeholder="Ingresa si el producto está disponible"
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>PrecioCompra</Form.Label>
+            <Form.Label>Precio Compra</Form.Label>
             <Form.Control
-              as="number"
-              rows={3}
-              name="PrecioCompra"
-              value={nuevoCliente.PrecioCompra}
+              type="number"
+              step="0.01"
+              name="preciocompra"
+              value={nuevoProducto.preciocompra}
               onChange={manejoCambioInput}
               placeholder="Ingresa el precio de compra"
             />
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>PrecioVenta</Form.Label>
+            <Form.Label>Precio Venta</Form.Label>
             <Form.Control
-              as="number"
-              rows={3}
-              name="PrecioVenta"
-              value={nuevoCliente.PrecioVenta}
+              type="number"
+              step="0.01"
+              name="precioventa"
+              value={nuevoProducto.precioventa}
               onChange={manejoCambioInput}
               placeholder="Ingresa el precio de venta"
             />
@@ -103,7 +100,7 @@ const ModalRegistroProducto = ({
         <Button
           variant="primary"
           onClick={handleRegistrar}
-          disabled={nuevoProducto.Nombre_P.trim() === "" || deshabilitado}
+          disabled={nuevoProducto.nombre_p.trim() === "" || deshabilitado}
         >
           Guardar
         </Button>
