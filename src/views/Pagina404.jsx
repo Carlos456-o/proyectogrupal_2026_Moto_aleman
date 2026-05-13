@@ -3,7 +3,7 @@ import { Container, Row, Col, Button } from "react-bootstrap";
 
 const Pagina404 = () => {
   return (
-    <Container className="mt-3">
+    <Container style={{ marginTop: "2cm" }}>
       <Row className="align-items-center">
         <Col>
           <h2><i className="bi bi-house-fill me-2"></i> Pagina404</h2>
