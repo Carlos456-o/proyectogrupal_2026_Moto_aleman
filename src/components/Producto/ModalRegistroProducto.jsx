@@ -6,6 +6,7 @@ const ModalRegistroProducto = ({
   setMostrarModal,
   nuevoProducto,
   manejoCambioInput,
+  manejoCambioArchivo,
   agregarProducto,
 }) => {
   const [deshabilitado, setDeshabilitado] = useState(false);
@@ -91,6 +92,10 @@ const ModalRegistroProducto = ({
               placeholder="Ingresa el precio de venta"
             />
           </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Imagen del producto *</Form.Label>
+            <Form.Control type="file" accept="image/*" onChange={manejoCambioArchivo} required />
+          </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
@@ -100,7 +105,7 @@ const ModalRegistroProducto = ({
         <Button
           variant="primary"
           onClick={handleRegistrar}
-          disabled={nuevoProducto.nombre_p.trim() === "" || deshabilitado}
+          disabled={nuevoProducto.nombre_p.trim() === "" || !nuevoProducto.archivo || deshabilitado}
         >
           Guardar
         </Button>

@@ -106,6 +106,7 @@ const Productos = () => {
     disponible: true,
     preciocompra: 0,
     precioventa: 0,
+    archivo: null,
   });
 
   const [productoEditar, setProductoEditar] = useState({
@@ -138,6 +139,14 @@ const Productos = () => {
     setNuevoProducto((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const manejoCambioArchivo = (e) => {
+    const archivo = e.target.files[0];
+    setNuevoProducto((prev) => ({
+      ...prev,
+      archivo: archivo,
     }));
   };
 
@@ -236,17 +245,29 @@ const Productos = () => {
       if (
         !nuevoProducto.nombre_p.trim() ||
         nuevoProducto.preciocompra <= 0 ||
-        nuevoProducto.precioventa <= 0
+        nuevoProducto.precioventa <= 0 ||
+        !nuevoProducto.archivo
       ) {
         setToast({
           mostrar: true,
-          mensaje: "Completa los campos obligatorios (nombre, precios)",
+          mensaje: "Completa los campos obligatorios (nombre, precios e imagen)",
           tipo: "advertencia",
         });
         return;
       }
 
       setMostrarModal(false);
+
+      const nombreArchivo = `${Date.now()}_${nuevoProducto.archivo.name}`;
+      const { error: uploadError } = await supabase.storage
+        .from("imagenes_productos")
+        .upload(nombreArchivo, nuevoProducto.archivo);
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = await supabase.storage
+        .from("imagenes_productos")
+        .getPublicUrl(nombreArchivo);
+      const urlPublica = urlData.publicUrl;
 
       const { error } = await supabase.from("productos").insert([
         {
@@ -256,6 +277,7 @@ const Productos = () => {
           disponible: nuevoProducto.disponible,
           preciocompra: parseFloat(nuevoProducto.preciocompra),
           precioventa: parseFloat(nuevoProducto.precioventa),
+          url_imagen: urlPublica,
         },
       ]);
       if (error) throw error;
@@ -269,6 +291,7 @@ const Productos = () => {
         disponible: true,
         preciocompra: 0,
         precioventa: 0,
+        archivo: null,
       });
 
       setToast({
@@ -385,6 +408,7 @@ const Productos = () => {
         setMostrarModal={setMostrarModal}
         nuevoProducto={nuevoProducto}
         manejoCambioInput={manejoCambioInput}
+        manejoCambioArchivo={manejoCambioArchivo}
         agregarProducto={agregarProducto}
       />
 
