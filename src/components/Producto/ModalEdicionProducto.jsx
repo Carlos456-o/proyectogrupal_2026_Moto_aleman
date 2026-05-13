@@ -6,6 +6,7 @@ const ModalEdicionProducto = ({
   setMostrarModal,
   productoEditar,
   manejoCambioInput,
+  manejoCambioArchivo,
   actualizarProducto,
 }) => {
   const [deshabilitado, setDeshabilitado] = useState(false);
@@ -91,6 +92,31 @@ const ModalEdicionProducto = ({
               onChange={manejoCambioInput}
               placeholder="Ingresa el precio de venta"
             />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Imagen del Producto</Form.Label>
+            {productoEditar.url_imagen && (
+              <div className="mb-3">
+                <img
+                  src={productoEditar.url_imagen}
+                  alt="Imagen actual"
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "150px",
+                    objectFit: "cover",
+                  }}
+                />
+                <p className="mt-2 text-muted small">Imagen actual</p>
+              </div>
+            )}
+            <Form.Control
+              type="file"
+              accept="image/*"
+              onChange={manejoCambioArchivo}
+            />
+            <Form.Text className="text-muted">
+              Carga una nueva imagen para reemplazar la actual (opcional)
+            </Form.Text>
           </Form.Group>
         </Form>
       </Modal.Body>

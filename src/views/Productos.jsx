@@ -41,6 +41,20 @@ const Productos = () => {
         precioventa: parseFloat(productoEditar.precioventa),
       };
 
+      // Si hay un nuevo archivo, subirlo y obtener la URL
+      if (productoEditar.archivo) {
+        const nombreArchivo = `${Date.now()}_${productoEditar.archivo.name}`;
+        const { error: uploadError } = await supabase.storage
+          .from("imagenes_productos")
+          .upload(nombreArchivo, productoEditar.archivo);
+        if (uploadError) throw uploadError;
+
+        const { data: urlData } = await supabase.storage
+          .from("imagenes_productos")
+          .getPublicUrl(nombreArchivo);
+        datosActualizados.url_imagen = urlData.publicUrl;
+      }
+
       // Actualizar el producto en la base de datos
       const { error } = await supabase
         .from("productos")
@@ -60,6 +74,8 @@ const Productos = () => {
         disponible: true,
         preciocompra: 0,
         precioventa: 0,
+        url_imagen: "",
+        archivo: null,
       });
 
       // Mostrar un mensaje de éxito
@@ -117,6 +133,8 @@ const Productos = () => {
     disponible: true,
     preciocompra: 0,
     precioventa: 0,
+    url_imagen: "",
+    archivo: null,
   });
 
   const [productoAEliminar, setProductoAEliminar] = useState(null);
@@ -145,6 +163,14 @@ const Productos = () => {
   const manejoCambioArchivo = (e) => {
     const archivo = e.target.files[0];
     setNuevoProducto((prev) => ({
+      ...prev,
+      archivo: archivo,
+    }));
+  };
+
+  const manejoCambioArchivoEdicion = (e) => {
+    const archivo = e.target.files[0];
+    setProductoEditar((prev) => ({
       ...prev,
       archivo: archivo,
     }));
@@ -205,6 +231,8 @@ const Productos = () => {
       disponible: producto.disponible,
       preciocompra: producto.preciocompra,
       precioventa: producto.precioventa,
+      url_imagen: producto.url_imagen || "",
+      archivo: null,
     });
     setMostrarModalEdicion(true);
   };
@@ -250,7 +278,8 @@ const Productos = () => {
       ) {
         setToast({
           mostrar: true,
-          mensaje: "Completa los campos obligatorios (nombre, precios e imagen)",
+          mensaje:
+            "Completa los campos obligatorios (nombre, precios e imagen)",
           tipo: "advertencia",
         });
         return;
@@ -417,6 +446,7 @@ const Productos = () => {
         setMostrarModal={setMostrarModalEdicion}
         productoEditar={productoEditar}
         manejoCambioInput={manejoCambioInputEdicion}
+        manejoCambioArchivo={manejoCambioArchivoEdicion}
         actualizarProducto={actualizarProducto}
       />
 

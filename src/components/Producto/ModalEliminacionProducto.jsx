@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 
 const ModalEliminacionProducto = ({
-  mostrarModal,
-  setMostrarModal,
-  productoEliminar,
+  mostrarModalEliminacion,
+  setMostrarModalEliminacion,
+  producto,
   eliminarProducto,
 }) => {
   const [deshabilitado, setDeshabilitado] = useState(false);
@@ -18,8 +18,8 @@ const ModalEliminacionProducto = ({
 
   return (
     <Modal
-      show={mostrarModal}
-      onHide={() => setMostrarModal(false)}
+      show={mostrarModalEliminacion}
+      onHide={() => setMostrarModalEliminacion(false)}
       backdrop="static"
       keyboard={false}
       centered
@@ -28,11 +28,17 @@ const ModalEliminacionProducto = ({
         <Modal.Title>Eliminar Producto</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>¿Estás seguro de que deseas eliminar el producto "{productoEliminar?.nombre_p}"?</p>
+        <p>
+          ¿Estás seguro de que deseas eliminar el producto "{producto?.nombre_p}
+          "?
+        </p>
         <p className="text-muted">Esta acción no se puede deshacer.</p>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={() => setMostrarModal(false)}>
+        <Button
+          variant="secondary"
+          onClick={() => setMostrarModalEliminacion(false)}
+        >
           Cancelar
         </Button>
         <Button

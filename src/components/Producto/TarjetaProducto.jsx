@@ -10,9 +10,23 @@ const TarjetaProducto = ({
   return (
     <Card className="h-100 shadow-sm border-0 product-card">
       <div className="product-image-container">
-        <div className="product-placeholder">
-          <i className="bi bi-gear-wide-connected text-muted fs-1"></i>
-        </div>
+        {producto.url_imagen ? (
+          <img
+            src={producto.url_imagen}
+            alt={producto.nombre_p}
+            className="product-image"
+            style={{
+              width: "100%",
+              height: "200px",
+              objectFit: "cover",
+              backgroundColor: "#f0f0f0",
+            }}
+          />
+        ) : (
+          <div className="product-placeholder">
+            <i className="bi bi-gear-wide-connected text-muted fs-1"></i>
+          </div>
+        )}
         {!producto.disponible && (
           <Badge bg="secondary" className="position-absolute top-0 end-0 m-2">
             No disponible
@@ -26,7 +40,10 @@ const TarjetaProducto = ({
       </div>
 
       <Card.Body className="d-flex flex-column">
-        <Card.Title className="product-title text-truncate" title={producto.nombre_p}>
+        <Card.Title
+          className="product-title text-truncate"
+          title={producto.nombre_p}
+        >
           {producto.nombre_p}
         </Card.Title>
 
@@ -44,7 +61,15 @@ const TarjetaProducto = ({
 
           <div className="d-flex justify-content-between align-items-center mb-3">
             <span className="text-muted small">Stock:</span>
-            <Badge bg={producto.cantidad > 10 ? "success" : producto.cantidad > 0 ? "warning" : "danger"}>
+            <Badge
+              bg={
+                producto.cantidad > 10
+                  ? "success"
+                  : producto.cantidad > 0
+                    ? "warning"
+                    : "danger"
+              }
+            >
               {producto.cantidad} unidades
             </Badge>
           </div>
