@@ -6,6 +6,7 @@ import TablaProducto from "../components/Producto/TablaProducto";
 import TarjetaProducto from "../components/Producto/TarjetaProducto";
 import NotificacionOperacion from "../components/NotificacionOperacion";
 import CuadroBusquedas from "../components/busquedas/CuadroBusquedas";
+import FiltroProductos from "../components/busquedas/FiltroProductos";
 import ModalEliminacionProducto from "../components/Producto/ModalEliminacionProducto";
 import ModalEdicionProducto from "../components/Producto/ModalEdicionProducto";
 import Paginacion from "../components/ordenamiento/Paginacion";
@@ -107,9 +108,100 @@ const Productos = () => {
   const [textoBusqueda, setTextoBusqueda] = useState("");
   const [cargando, setCargando] = useState(true);
 
+  const [filtros, setFiltros] = useState({
+    disponibles: true,
+    noDisponibles: true,
+    enStock: true,
+    agotado: true,
+    precioMinimo: "",
+    precioMaximo: "",
+  });
+
   const manejarCambioBusqueda = (e) => {
     setTextoBusqueda(e.target.value);
   };
+
+  const manejarCambioFiltro = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFiltros((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const limpiarFiltros = () => {
+    setFiltros({
+      disponibles: true,
+      noDisponibles: true,
+      enStock: true,
+      agotado: true,
+      precioMinimo: "",
+      precioMaximo: "",
+    });
+  };
+
+  useEffect(() => {
+    // Aplicar filtros de búsqueda y filtros avanzados
+    let productosFiltrados = productos;
+
+    // Filtro de texto de búsqueda
+    if (textoBusqueda.trim()) {
+      const textoLower = textoBusqueda.toLowerCase().trim();
+      productosFiltrados = productosFiltrados.filter((prod) => {
+        const nombre = prod.nombre_p?.toLowerCase() || "";
+        const descripcion = prod.descripcion?.toLowerCase() || "";
+        const precio = prod.precioventa?.toString() || "";
+        return (
+          nombre.includes(textoLower) ||
+          descripcion.includes(textoLower) ||
+          precio.includes(textoLower)
+        );
+      });
+    }
+
+    // Filtro de disponibilidad
+    if (!filtros.disponibles || !filtros.noDisponibles) {
+      productosFiltrados = productosFiltrados.filter((prod) => {
+        if (filtros.disponibles && !filtros.noDisponibles) {
+          return prod.disponible;
+        }
+        if (!filtros.disponibles && filtros.noDisponibles) {
+          return !prod.disponible;
+        }
+        return true;
+      });
+    }
+
+    // Filtro de stock
+    if (!filtros.enStock || !filtros.agotado) {
+      productosFiltrados = productosFiltrados.filter((prod) => {
+        if (filtros.enStock && !filtros.agotado) {
+          return prod.cantidad > 0;
+        }
+        if (!filtros.enStock && filtros.agotado) {
+          return prod.cantidad === 0;
+        }
+        return true;
+      });
+    }
+
+    // Filtro de rango de precio
+    if (filtros.precioMinimo || filtros.precioMaximo) {
+      productosFiltrados = productosFiltrados.filter((prod) => {
+        const precio = prod.precioventa || 0;
+        const minPrice = filtros.precioMinimo
+          ? parseFloat(filtros.precioMinimo)
+          : 0;
+        const maxPrice = filtros.precioMaximo
+          ? parseFloat(filtros.precioMaximo)
+          : Infinity;
+        return precio >= minPrice && precio <= maxPrice;
+      });
+    }
+
+    setProductosFiltrados(productosFiltrados);
+    setPaginaActual(1); // Reiniciar a primera página
+  }, [textoBusqueda, filtros, productos]);
 
   const [mostrarModal, setMostrarModal] = useState(false);
   const [mostrarModalEliminacion, setMostrarModalEliminacion] = useState(false);
@@ -348,7 +440,7 @@ const Productos = () => {
           </h3>
         </Col>
       </Row>
-      <Row className="mb-4 align-items-center">
+      <Row className="mb-4 align-items-center gap-2">
         <Col md={6} lg={5}>
           <CuadroBusquedas
             textoBusqueda={textoBusqueda}
@@ -356,7 +448,24 @@ const Productos = () => {
             placeholder="Buscar repuestos, piezas, accesorios..."
           />
         </Col>
-        <Col md={6} lg={7} className="text-end">
+        <Col md="auto">
+          <FiltroProductos
+            filtros={filtros}
+            manejarCambioFiltro={manejarCambioFiltro}
+            limpiarFiltros={limpiarFiltros}
+            precioMin={
+              productos.length > 0
+                ? Math.min(...productos.map((p) => p.precioventa || 0))
+                : null
+            }
+            precioMax={
+              productos.length > 0
+                ? Math.max(...productos.map((p) => p.precioventa || 0))
+                : null
+            }
+          />
+        </Col>
+        <Col md="auto" className="ms-auto">
           <Button onClick={() => setMostrarModal(true)} size="md">
             <i className="bi-plus-lg"></i>
             <span className="d-none d-sm-inline ms-2">Agregar Repuesto</span>
