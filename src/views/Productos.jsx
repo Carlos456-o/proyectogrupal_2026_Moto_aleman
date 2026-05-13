@@ -287,48 +287,50 @@ const Productos = () => {
   };
 
   return (
-    <Container className="mt-3">
-      <Row className="align-items-center mb-3">
-        <Col className="d-flex align-items-center">
+    <Container style={{ marginTop: "2cm" }}>
+      <Row className="mb-3">
+        <Col>
           <h3 className="mb-0">
-            <i className="bi-bag-heart-fill me-2"></i> Productos
+            <i className="bi bi-gear-wide-connected me-2 text-primary"></i>{" "}
+            Catálogo de Repuestos
           </h3>
         </Col>
-        <Col xs={3} sm={5} md={5} lg={5} className="text-end">
-          <Button onClick={() => setMostrarModal(true)} size="md">
-            <i className="bi-plus-lg"></i>
-            <span className="d-none d-sm-inline ms-2">Nuevo Producto</span>
-          </Button>
-        </Col>
       </Row>
-      <hr />
-      <Row className="mb-4">
+      <Row className="mb-4 align-items-center">
         <Col md={6} lg={5}>
           <CuadroBusquedas
             textoBusqueda={textoBusqueda}
             manejarCambioBusqueda={manejarCambioBusqueda}
-            placeholder="Buscar por nombre, descripción o precio..."
+            placeholder="Buscar repuestos, piezas, accesorios..."
           />
+        </Col>
+        <Col md={6} lg={7} className="text-end">
+          <Button onClick={() => setMostrarModal(true)} size="md">
+            <i className="bi-plus-lg"></i>
+            <span className="d-none d-sm-inline ms-2">Agregar Repuesto</span>
+          </Button>
         </Col>
       </Row>
 
       {!cargando && productosFiltrados.length > 0 && (
         <>
-          <Row>
-            <Col xs={12} className="d-lg-none">
-              <TarjetaProducto
-                productos={productosPaginados}
-                abrirModalEdicion={abrirModalEdicion}
-                abrirModalEliminacion={abrirModalEliminacion}
-              />
-            </Col>
-            <Col lg={12} className="d-none d-lg-block">
-              <TablaProducto
-                productos={productosPaginados}
-                abrirModalEdicion={abrirModalEdicion}
-                abrirModalEliminacion={abrirModalEliminacion}
-              />
-            </Col>
+          <Row className="g-4">
+            {productosPaginados.map((producto) => (
+              <Col
+                key={producto.id_producto}
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={3}
+              >
+                <TarjetaProducto
+                  producto={producto}
+                  abrirModalEdicion={abrirModalEdicion}
+                  abrirModalEliminacion={abrirModalEliminacion}
+                />
+              </Col>
+            ))}
           </Row>
           <Row className="mt-4">
             <Col>
@@ -360,8 +362,8 @@ const Productos = () => {
           <Col>
             <Alert variant="info" className="text-center">
               <i className="bi bi-info-circle me-2"></i>
-              No hay productos registrados. Agrega un nuevo producto para
-              comenzar.
+              No hay repuestos registrados. Agrega un nuevo repuesto para
+              comenzar tu catálogo.
             </Alert>
           </Col>
         </Row>
@@ -371,7 +373,9 @@ const Productos = () => {
         <Row className="text-center my-5">
           <Col>
             <Spinner animation="border" variant="success" size="lg" />
-            <p className="mt-3 text-muted">Cargando productos ...</p>
+            <p className="mt-3 text-muted">
+              Cargando catálogo de repuestos ...
+            </p>
           </Col>
         </Row>
       )}

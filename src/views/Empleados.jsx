@@ -1,21 +1,17 @@
-
 import { supabase } from "../database/supabaseconfig";
 import ModalRegistroEmpleados from "../components/Empleados/ModalRegistroEmpleados";
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import NotificacionOperacion from "../components/NotificacionOperacion";
-import TablaEmpleados from "../components/Empleados/TablaEmpleados";
+import TarjetaEmpleado from "../components/Empleados/TarjetaEmpleado";
 import ModalEdicionEmpleado from "../components/Empleados/ModalEdicionEmpleados";
 import ModalEliminacionEmpleado from "../components/Empleados/ModalEliminacionEmpleados";
-import TarjetaEmpleado from "../components/Empleados/TarjetaEmpleado";
 import CuadroBusquedas from "../components/busquedas/CuadroBusquedas";
 import { Alert } from "react-bootstrap";
 import Paginacion from "../components/ordenamiento/Paginacion";
 
-
 const Empleados = () => {
-
-    const [toast, setToast] = useState({ mostrar: false, mensaje: "", tipo: "" });
+  const [toast, setToast] = useState({ mostrar: false, mensaje: "", tipo: "" });
   const [mostrarModal, setMostrarModal] = useState(false);
 
   const [nuevoEmpleado, setNuevoEmpleado] = useState({
@@ -24,8 +20,7 @@ const Empleados = () => {
     cargo: "",
   });
 
-
-    const [empleados, setEmpleados] = useState([]);
+  const [empleados, setEmpleados] = useState([]);
   const [cargando, setCargando] = useState(true); // Estado de carga inicial
   const [mostrarModalEliminacion, setMostrarModalEliminacion] = useState(false);
   const [empleadoAEliminar, setEmpleadoAEliminar] = useState(null);
@@ -45,9 +40,8 @@ const Empleados = () => {
 
   const empleadosPaginados = empleadosFiltrados.slice(
     (paginaActual - 1) * registrosPorPagina,
-    paginaActual * registrosPorPagina
+    paginaActual * registrosPorPagina,
   );
-
 
   const manejarBusqueda = (e) => {
     setTextoBusqueda(e.target.value);
@@ -62,9 +56,11 @@ const Empleados = () => {
       setEmpleadosFiltrados(empleados);
     } else {
       const textoLower = textoBusqueda.toLowerCase().trim();
-      const filtradas = empleados.filter((emp) =>
-        emp.nombre_empleado.toLowerCase().includes(textoLower) ||
-        (emp.descripcion_empleado && emp.descripcion_empleado.toLowerCase().includes(textoLower))
+      const filtradas = empleados.filter(
+        (emp) =>
+          emp.nombre_empleado.toLowerCase().includes(textoLower) ||
+          (emp.descripcion_empleado &&
+            emp.descripcion_empleado.toLowerCase().includes(textoLower)),
       );
       setEmpleadosFiltrados(filtradas);
     }
@@ -113,11 +109,14 @@ const Empleados = () => {
     }
   };
 
-
   const actualizarEmpleado = async () => {
     try {
       // Verificar que los campos de nombre y descripción no estén vacíos
-      if (!empleadoEditar.nombre.trim() || !empleadoEditar.apellido.trim() || !empleadoEditar.cargo.trim()) {
+      if (
+        !empleadoEditar.nombre.trim() ||
+        !empleadoEditar.apellido.trim() ||
+        !empleadoEditar.cargo.trim()
+      ) {
         setToast({
           mostrar: true,
           mensaje: "Debe llenar todos los campos.",
@@ -287,32 +286,30 @@ const Empleados = () => {
   };
 
   return (
-    <Container className="mt-3">
-      {/* Título y botón Nueva Categoría */}
-      <Row className="align-items-center mb-3">
-        <Col xs={9} sm={7} md={7} lg={7} className="d-flex align-items-center">
+    <Container style={{ marginTop: "2cm" }}>
+      <Row className="mb-3">
+        <Col>
           <h3 className="mb-0">
-            <i className="bi-bookmark-plus-fill me-2"></i> Empleados
+            <i className="bi-bookmark-plus-fill me-2 text-primary"></i>{" "}
+            Empleados
           </h3>
-        </Col>
-        <Col xs={3} sm={5} md={5} lg={5} className="text-end">
-          <Button onClick={() => setMostrarModal(true)} size="md">
-            <i className="bi-plus-lg"></i>
-            <span className="d-none d-sm-inline ms-2">Nuevo Empleado</span>
-          </Button>
         </Col>
       </Row>
 
-      <hr />
-
       {/* Cuadro de búsqueda debajo de la línea divisoria */}
-      <Row className="mb-4">
+      <Row className="mb-4 align-items-center">
         <Col md={6} lg={5}>
           <CuadroBusquedas
             textoBusqueda={textoBusqueda}
             manejarCambioBusqueda={manejarBusqueda}
             placeholder="Buscar por nombre o descripción..."
           />
+        </Col>
+        <Col md={6} lg={7} className="text-end">
+          <Button onClick={() => setMostrarModal(true)} size="md">
+            <i className="bi-plus-lg"></i>
+            <span className="d-none d-sm-inline ms-2">Nuevo Empleado</span>
+          </Button>
         </Col>
       </Row>
 
@@ -340,15 +337,37 @@ const Empleados = () => {
 
       {/* Lista de empleados cargados */}
       {!cargando && empleados.length > 0 && (
-        <Row>
-          <Col lg={12} className="d-none d-lg-block">
-            <TablaEmpleados
-              empleados={empleados}
-              abrirModalEdicion={abrirModalEdicion}
-              abrirModalEliminacion={abrirModalEliminación}
-            />
-          </Col>
-        </Row>
+        <>
+          <Row className="g-4">
+            {empleadosPaginados.map((empleado) => (
+              <Col
+                key={empleado.id_empleado}
+                xs={12}
+                sm={6}
+                md={4}
+                lg={3}
+                xl={3}
+              >
+                <TarjetaEmpleado
+                  empleado={empleado}
+                  abrirModalEdicion={abrirModalEdicion}
+                  abrirModalEliminacion={abrirModalEliminación}
+                />
+              </Col>
+            ))}
+          </Row>
+          <Row className="mt-4">
+            <Col>
+              <Paginacion
+                registrosPorPagina={registrosPorPagina}
+                totalRegistros={empleadosFiltrados.length}
+                paginaActual={paginaActual}
+                establecerPaginaActual={establecerPaginaActual}
+                establecerRegistrosPorPagina={establecerRegistrosPorPagina}
+              />
+            </Col>
+          </Row>
+        </>
       )}
 
       {/* Modal de Registro */}
@@ -367,7 +386,6 @@ const Empleados = () => {
         empleado={empleadoAEliminar}
       />
 
-
       <ModalEdicionEmpleado
         mostrarModalEdicion={mostrarModalEdicion}
         setMostrarModalEdicion={setMostrarModalEdicion}
@@ -375,17 +393,6 @@ const Empleados = () => {
         manejoCambioInputEdicion={manejoCambioInputEdicion}
         actualizarEmpleado={actualizarEmpleado}
       />
-
-      {/* Paginación */}
-      {empleadosFiltrados.length > 0 && (
-        <Paginacion
-          registrosPorPagina={registrosPorPagina}
-          totalRegistros={empleadosFiltrados.length}
-          paginaActual={paginaActual}
-          establecerPaginaActual={establecerPaginaActual}
-          establecerRegistrosPorPagina={establecerRegistrosPorPagina}
-        />
-      )}
 
       {/* Notificación */}
       <NotificacionOperacion

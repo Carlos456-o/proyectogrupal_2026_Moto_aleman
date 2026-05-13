@@ -1,128 +1,79 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { Card, Row, Col, Spinner, Button } from "react-bootstrap";
+import React from "react";
+import { Card, Button, Badge } from "react-bootstrap";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 const TarjetaProducto = ({
-  productos,
+  producto,
   abrirModalEdicion,
   abrirModalEliminacion,
 }) => {
-  const [cargando, setCargando] = useState(true);
-  const [idTarjetaActiva, setIdTarjetaActiva] = useState(null);
+  return (
+    <Card className="h-100 shadow-sm border-0 product-card">
+      <div className="product-image-container">
+        <div className="product-placeholder">
+          <i className="bi bi-gear-wide-connected text-muted fs-1"></i>
+        </div>
+        {!producto.disponible && (
+          <Badge bg="secondary" className="position-absolute top-0 end-0 m-2">
+            No disponible
+          </Badge>
+        )}
+        {producto.cantidad === 0 && (
+          <Badge bg="danger" className="position-absolute top-0 start-0 m-2">
+            Agotado
+          </Badge>
+        )}
+      </div>
 
-  useEffect(() => {
-    setCargando(!(productos && productos.length > 0));
-  }, [productos]);
+      <Card.Body className="d-flex flex-column">
+        <Card.Title className="product-title text-truncate" title={producto.nombre_p}>
+          {producto.nombre_p}
+        </Card.Title>
 
-  const manejarTeclaEscape = useCallback((evento) => {
-    if (evento.key === "Escape") setIdTarjetaActiva(null);
-  }, []);
+        <Card.Text className="product-description text-muted small flex-grow-1">
+          {producto.descripcion || "Sin descripción"}
+        </Card.Text>
 
-  useEffect(() => {
-    window.addEventListener("keydown", manejarTeclaEscape);
-    return () => window.removeEventListener("keydown", manejarTeclaEscape);
-  }, [manejarTeclaEscape]);
+        <div className="product-price-section mt-auto">
+          <div className="d-flex justify-content-between align-items-center mb-2">
+            <span className="text-muted small">Precio:</span>
+            <span className="product-price fw-bold text-success">
+              C$ {producto.precioventa?.toFixed(2)}
+            </span>
+          </div>
 
-  const alternarTarjetaActiva = (id) => {
-    setIdTarjetaActiva((anterior) => (anterior === id ? null : id));
-  };
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <span className="text-muted small">Stock:</span>
+            <Badge bg={producto.cantidad > 10 ? "success" : producto.cantidad > 0 ? "warning" : "danger"}>
+              {producto.cantidad} unidades
+            </Badge>
+          </div>
+        </div>
 
-  return cargando ? (
-    <div className="text-center my-5">
-      <h5>Cargando productos ...</h5>
-      <Spinner animation="border" variant="success" role="status" />
-    </div>
-  ) : (
-    <div>
-      {productos.map((producto) => {
-        const tarjetaActiva = idTarjetaActiva === producto.id_producto;
-        return (
-          <Card
-            key={producto.id_producto}
-            className="mb-3 border-0 rounded-3 shadow-sm w-100 tarjeta-categoria-contenedor"
-            onClick={() => alternarTarjetaActiva(producto.id_producto)}
-            tabIndex={0}
-            onKeyDown={(evento) => {
-              if (evento.key === "Enter" || evento.key === " ") {
-                evento.preventDefault();
-                alternarTarjetaActiva(producto.id_producto);
-              }
-            }}
-            aria-label={`Producto ${producto.nombre_p}`}
+        <div className="d-flex gap-2 mt-2">
+          <Button
+            variant="outline-primary"
+            size="sm"
+            className="flex-fill"
+            onClick={() => abrirModalEdicion(producto)}
+            title="Editar producto"
           >
-            <Card.Body
-              className={`p-2 tarjeta-categoria-cuerpo ${tarjetaActiva ? "tarjeta-categoria-cuerpo-activo" : "tarjeta-categoria-cuerpo-inactivo"}`}
-            >
-              <Row className="align-items-center gx-3">
-                <Col xs={2} className="px-2">
-                  <div className="bg-light d-flex align-items-center justify-content-center rounded tarjeta-categoria-placeholder-imagen">
-                    <i className="bi bi-box-seam text-muted fs-3"></i>
-                  </div>
-                </Col>
-                <Col xs={5} className="text-start">
-                  <div className="fw-semibold text-truncate">
-                    {producto.nombre_p}
-                  </div>
-                  <div className="small text-muted text-truncate">
-                    Cantidad: {producto.cantidad}
-                  </div>
-                </Col>
-                <Col
-                  xs={5}
-                  className="d-flex flex-column align-items-end justify-content-center text-end"
-                >
-                  <div className="fw-semibold small">
-                    C$ {producto.precioventa?.toFixed(2)}
-                  </div>
-                  <div className="small text-muted text-truncate">
-                    {producto.descripcion || "Sin descripción"}
-                  </div>
-                </Col>
-              </Row>
-            </Card.Body>
-            {tarjetaActiva && (
-              <div
-                role="dialog"
-                aria-modal="true"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setIdTarjetaActiva(null);
-                }}
-                className="tarjeta-categoria-capa"
-              >
-                <div
-                  className="d-flex gap-2 tarjeta-categoria-botones-capa"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Button
-                    variant="outline-warning"
-                    size="sm"
-                    onClick={() => {
-                      abrirModalEdicion(producto);
-                      setIdTarjetaActiva(null);
-                    }}
-                    aria-label={`Editar ${producto.nombre_p}`}
-                  >
-                    <i className="bi bi-pencil"></i>
-                  </Button>
-                  <Button
-                    variant="outline-danger"
-                    size="sm"
-                    onClick={() => {
-                      abrirModalEliminacion(producto);
-                      setIdTarjetaActiva(null);
-                    }}
-                    aria-label={`Eliminar ${producto.nombre_p}`}
-                  >
-                    <i className="bi bi-trash"></i>
-                  </Button>
-                </div>
-              </div>
-            )}
-          </Card>
-        );
-      })}
-    </div>
+            <i className="bi bi-pencil me-1"></i>
+            Editar
+          </Button>
+          <Button
+            variant="outline-danger"
+            size="sm"
+            className="flex-fill"
+            onClick={() => abrirModalEliminacion(producto)}
+            title="Eliminar producto"
+          >
+            <i className="bi bi-trash me-1"></i>
+            Eliminar
+          </Button>
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
 

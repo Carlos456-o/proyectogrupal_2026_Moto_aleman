@@ -3,7 +3,7 @@ import ModalRegistroClientes from "../components/Clientes/ModalRegistroClientes"
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Button, Spinner } from "react-bootstrap";
 import NotificacionOperacion from "../components/NotificacionOperacion";
-import TarjetasClientes from "../components/Clientes/TarjetasClientes";
+import TarjetaCliente from "../components/Clientes/TarjetaCliente";
 import ModalEdicionClientes from "../components/Clientes/ModalEdicionClientes";
 import ModalEliminacionClientes from "../components/Clientes/ModalEliminacionClientes";
 import CuadroBusquedas from "../components/busquedas/CuadroBusquedas";
@@ -44,7 +44,7 @@ const Clientes = () => {
 
   const clientesPaginados = clientesFiltrados.slice(
     (paginaActual - 1) * registrosPorPagina,
-    paginaActual * registrosPorPagina
+    paginaActual * registrosPorPagina,
   );
 
   const manejarBusqueda = (e) => {
@@ -60,9 +60,10 @@ const Clientes = () => {
       setClientesFiltrados(clientes);
     } else {
       const textoLower = textoBusqueda.toLowerCase().trim();
-      const filtradas = clientes.filter((cli) =>
-        cli.nombre1.toLowerCase().includes(textoLower) ||
-        (cli.apellidos1 && cli.apellidos1.toLowerCase().includes(textoLower))
+      const filtradas = clientes.filter(
+        (cli) =>
+          cli.nombre1.toLowerCase().includes(textoLower) ||
+          (cli.apellidos1 && cli.apellidos1.toLowerCase().includes(textoLower)),
       );
       setClientesFiltrados(filtradas);
     }
@@ -259,7 +260,13 @@ const Clientes = () => {
 
       cargarClientes();
 
-      setNuevoCliente({ nombre1: "", nombre2: "", apellidos1: "", apellidos2: "", cedula: "" });
+      setNuevoCliente({
+        nombre1: "",
+        nombre2: "",
+        apellidos1: "",
+        apellidos2: "",
+        cedula: "",
+      });
       setMostrarModal(false);
     } catch (err) {
       console.error("Excepción al agregar cliente:", err.message);
@@ -272,30 +279,28 @@ const Clientes = () => {
   };
 
   return (
-    <Container className="mt-3">
-      <Row className="align-items-center mb-3">
-        <Col xs={9} sm={7} md={7} lg={7} className="d-flex align-items-center">
+    <Container style={{ marginTop: "2cm" }}>
+      <Row className="mb-3">
+        <Col>
           <h3 className="mb-0">
-            <i className="bi-person-fill me-2"></i> Clientes
+            <i className="bi-person-fill me-2 text-primary"></i> Clientes
           </h3>
-        </Col>
-        <Col xs={3} sm={5} md={5} lg={5} className="text-end">
-          <Button onClick={() => setMostrarModal(true)} size="md">
-            <i className="bi-plus-lg"></i>
-            <span className="d-none d-sm-inline ms-2">Nuevo Cliente</span>
-          </Button>
         </Col>
       </Row>
 
-      <hr />
-
-      <Row className="mb-4">
+      <Row className="mb-4 align-items-center">
         <Col md={6} lg={5}>
           <CuadroBusquedas
             textoBusqueda={textoBusqueda}
             manejarCambioBusqueda={manejarBusqueda}
             placeholder="Buscar por nombre o apellidos..."
           />
+        </Col>
+        <Col md={6} lg={7} className="text-end">
+          <Button onClick={() => setMostrarModal(true)} size="md">
+            <i className="bi-plus-lg"></i>
+            <span className="d-none d-sm-inline ms-2">Nuevo Cliente</span>
+          </Button>
         </Col>
       </Row>
 
@@ -320,15 +325,30 @@ const Clientes = () => {
       )}
 
       {!cargando && clientes.length > 0 && (
-        <Row>
-          <Col lg={12}>
-            <TarjetasClientes
-              clientes={clientesPaginados}
-              abrirModalEdicion={abrirModalEdicion}
-              abrirModalEliminacion={abrirModalEliminacion}
-            />
-          </Col>
-        </Row>
+        <>
+          <Row className="g-4">
+            {clientesPaginados.map((cliente) => (
+              <Col key={cliente.id_cliente} xs={12} sm={6} md={4} lg={3} xl={3}>
+                <TarjetaCliente
+                  cliente={cliente}
+                  abrirModalEdicion={abrirModalEdicion}
+                  abrirModalEliminacion={abrirModalEliminacion}
+                />
+              </Col>
+            ))}
+          </Row>
+          <Row className="mt-4">
+            <Col>
+              <Paginacion
+                registrosPorPagina={registrosPorPagina}
+                totalRegistros={clientesFiltrados.length}
+                paginaActual={paginaActual}
+                establecerPaginaActual={establecerPaginaActual}
+                establecerRegistrosPorPagina={establecerRegistrosPorPagina}
+              />
+            </Col>
+          </Row>
+        </>
       )}
 
       <ModalRegistroClientes
@@ -353,16 +373,6 @@ const Clientes = () => {
         manejoCambioInputEdicion={manejoCambioInputEdicion}
         actualizarCliente={actualizarCliente}
       />
-
-      {clientesFiltrados.length > 0 && (
-        <Paginacion
-          registrosPorPagina={registrosPorPagina}
-          totalRegistros={clientesFiltrados.length}
-          paginaActual={paginaActual}
-          establecerPaginaActual={establecerPaginaActual}
-          establecerRegistrosPorPagina={establecerRegistrosPorPagina}
-        />
-      )}
 
       <NotificacionOperacion
         mostrar={toast.mostrar}
