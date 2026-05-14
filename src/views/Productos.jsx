@@ -203,6 +203,7 @@ const Productos = () => {
     setPaginaActual(1); // Reiniciar a primera página
   }, [textoBusqueda, filtros, productos]);
 
+  const [vistaActual, setVistaActual] = useState("tarjeta"); // "tarjeta" o "tabla"
   const [mostrarModal, setMostrarModal] = useState(false);
   const [mostrarModalEliminacion, setMostrarModalEliminacion] = useState(false);
   const [mostrarModalEdicion, setMostrarModalEdicion] = useState(false);
@@ -465,6 +466,28 @@ const Productos = () => {
             }
           />
         </Col>
+        <Col md="auto">
+          <div className="btn-group" role="group">
+            <Button
+              variant={vistaActual === "tarjeta" ? "primary" : "outline-primary"}
+              onClick={() => setVistaActual("tarjeta")}
+              title="Vista de tarjetas"
+              className="d-none d-sm-inline-block"
+            >
+              <i className="bi bi-square-fill"></i>
+              <span className="d-none d-md-inline ms-2">Tarjetas</span>
+            </Button>
+            <Button
+              variant={vistaActual === "tabla" ? "primary" : "outline-primary"}
+              onClick={() => setVistaActual("tabla")}
+              title="Vista de tabla"
+              className="d-none d-sm-inline-block"
+            >
+              <i className="bi bi-table"></i>
+              <span className="d-none d-md-inline ms-2">Tabla</span>
+            </Button>
+          </div>
+        </Col>
         <Col md="auto" className="ms-auto">
           <Button onClick={() => setMostrarModal(true)} size="md">
             <i className="bi-plus-lg"></i>
@@ -475,24 +498,36 @@ const Productos = () => {
 
       {!cargando && productosFiltrados.length > 0 && (
         <>
-          <Row className="g-4">
-            {productosPaginados.map((producto) => (
-              <Col
-                key={producto.id_producto}
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={3}
-              >
-                <TarjetaProducto
-                  producto={producto}
+          {vistaActual === "tarjeta" ? (
+            <Row className="g-4">
+              {productosPaginados.map((producto) => (
+                <Col
+                  key={producto.id_producto}
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  xl={3}
+                >
+                  <TarjetaProducto
+                    producto={producto}
+                    abrirModalEdicion={abrirModalEdicion}
+                    abrirModalEliminacion={abrirModalEliminacion}
+                  />
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <Row>
+              <Col>
+                <TablaProducto
+                  productos={productosPaginados}
                   abrirModalEdicion={abrirModalEdicion}
                   abrirModalEliminacion={abrirModalEliminacion}
                 />
               </Col>
-            ))}
-          </Row>
+            </Row>
+          )}
           <Row className="mt-4">
             <Col>
               <Paginacion

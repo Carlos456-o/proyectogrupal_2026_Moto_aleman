@@ -10,22 +10,16 @@ const TablaClientes = ({
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (clientes && clientes.length > 0) {
-      setLoading(false);
-    } else {
-      setLoading(true);
-    }
+    setLoading(!(clientes && clientes.length > 0));
   }, [clientes]);
 
-  return (
-    <>
-      {loading ? (
-        <div className="text-center">
-          <h4>Cargando clientes ...</h4>
-          <Spinner animation="border" variant="success" role="status" />
-        </div>
-      ) : (
-        <Table striped borderless hover responsive size="sm">
+  return loading ? (
+    <div className="text-center my-5">
+      <h4>Cargando clientes ...</h4>
+      <Spinner animation="border" variant="success" role="status" />
+    </div>
+  ) : (
+    <Table striped borderless hover responsive size="sm">
           <thead>
             <tr>
               <th>ID</th>
@@ -70,9 +64,7 @@ const TablaClientes = ({
               </tr>
             ))}
           </tbody>
-        </Table>
-      )}
-    </>
+    </Table>
   );
 };
 

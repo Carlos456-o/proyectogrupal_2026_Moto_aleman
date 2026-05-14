@@ -13,13 +13,6 @@ const TablaProducto = ({
     setLoading(!(productos && productos.length > 0));
   }, [productos]);
 
-  const obtenerNombreCategoria = (categoriaId) => {
-    return (
-      categorias.find((cat) => cat.id_categoria === categoriaId)
-        ?.nombre_categoria || "Sin categoría"
-    );
-  };
-
   return loading ? (
     <div className="text-center my-5">
       <h4>Cargando productos ...</h4>

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Container, Nav, Navbar, Offcanvas } from "react-bootstrap";
+import { Container, Nav, Navbar, Offcanvas, Modal, Button } from "react-bootstrap";
 import logo from "../../assets/logo.png";
 import { supabase } from "../../database/supabaseconfig";
 
 const Encabezado = () => {
   const [mostrarMenu, setMostrarMenu] = useState(false);
+  const [mostrarConfirmacion, setMostrarConfirmacion] = useState(false);
   const navigate = useNavigate();
   const location = useLocation(); // Para detectar la ruta actual
 
@@ -16,12 +17,21 @@ const Encabezado = () => {
     setMostrarMenu(false);
   };
 
-  const cerrarSesion = async () => {
+  const abrirConfirmacion = () => {
+    setMostrarConfirmacion(true);
+  };
+
+  const cerrarConfirmacion = () => {
+    setMostrarConfirmacion(false);
+  };
+
+  const confirmarCerrarSesion = async () => {
     try {
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       localStorage.removeItem("usuario-supabase");
       setMostrarMenu(false);
+      setMostrarConfirmacion(false);
       navigate("/login");
     } catch (err) {
       console.error("Error cerrando sesión:", err.message);
@@ -143,7 +153,7 @@ const Encabezado = () => {
                 </p>
                 <button
                   className="btn btn-outline-danger mt-3 w-100"
-                  onClick={cerrarSesion}
+                  onClick={abrirConfirmacion}
                 >
                   <i className="bi-box-arrow-right me-2"></i> Cerrar sesión
                 </button>
@@ -151,6 +161,41 @@ const Encabezado = () => {
             )}
           </Offcanvas.Body>
         </Navbar.Offcanvas>
+
+        {!esLogin && (
+          <Nav className="d-none d-md-flex align-items-center ms-2">
+            <button
+              className="btn btn-outline-danger btn-sm"
+              onClick={abrirConfirmacion}
+              title="Cerrar sesión"
+            >
+              <i className="bi-box-arrow-right me-2"></i>
+              <span>Cerrar sesión</span>
+            </button>
+          </Nav>
+        )}
+
+        <Modal show={mostrarConfirmacion} onHide={cerrarConfirmacion} centered>
+          <Modal.Header closeButton>
+            <Modal.Title>
+              <i className="bi-question-circle me-2 text-warning"></i>
+              Confirmar cierre de sesión
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            ¿Estás seguro de que deseas cerrar sesión? Tendrás que iniciar sesión nuevamente para acceder a la aplicación.
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={cerrarConfirmacion}>
+              <i className="bi-x-circle me-2"></i>
+              Cancelar
+            </Button>
+            <Button variant="danger" onClick={confirmarCerrarSesion}>
+              <i className="bi-box-arrow-right me-2"></i>
+              Sí, cerrar sesión
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </Container>
     </Navbar>
   );

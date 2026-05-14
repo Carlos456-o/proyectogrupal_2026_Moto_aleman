@@ -8,9 +8,11 @@ import ModalEdicionClientes from "../components/Clientes/ModalEdicionClientes";
 import ModalEliminacionClientes from "../components/Clientes/ModalEliminacionClientes";
 import CuadroBusquedas from "../components/busquedas/CuadroBusquedas";
 import { Alert } from "react-bootstrap";
+import TablaClientes from "../components/Clientes/TablaClientes";
 import Paginacion from "../components/ordenamiento/Paginacion";
 
 const Clientes = () => {
+  const [vistaActual, setVistaActual] = useState("tabla"); // "tarjeta" o "tabla"
   const [toast, setToast] = useState({ mostrar: false, mensaje: "", tipo: "" });
   const [mostrarModal, setMostrarModal] = useState(false);
 
@@ -288,7 +290,7 @@ const Clientes = () => {
         </Col>
       </Row>
 
-      <Row className="mb-4 align-items-center">
+      <Row className="mb-4 align-items-center gap-2">
         <Col md={6} lg={5}>
           <CuadroBusquedas
             textoBusqueda={textoBusqueda}
@@ -296,7 +298,29 @@ const Clientes = () => {
             placeholder="Buscar por nombre o apellidos..."
           />
         </Col>
-        <Col md={6} lg={7} className="text-end">
+        <Col md="auto">
+          <div className="btn-group" role="group">
+            <Button
+              variant={vistaActual === "tarjeta" ? "primary" : "outline-primary"}
+              onClick={() => setVistaActual("tarjeta")}
+              title="Vista de tarjetas"
+              className="d-none d-sm-inline-block"
+            >
+              <i className="bi bi-square-fill"></i>
+              <span className="d-none d-md-inline ms-2">Tarjetas</span>
+            </Button>
+            <Button
+              variant={vistaActual === "tabla" ? "primary" : "outline-primary"}
+              onClick={() => setVistaActual("tabla")}
+              title="Vista de tabla"
+              className="d-none d-sm-inline-block"
+            >
+              <i className="bi bi-table"></i>
+              <span className="d-none d-md-inline ms-2">Tabla</span>
+            </Button>
+          </div>
+        </Col>
+        <Col md="auto" className="ms-auto">
           <Button onClick={() => setMostrarModal(true)} size="md">
             <i className="bi-plus-lg"></i>
             <span className="d-none d-sm-inline ms-2">Nuevo Cliente</span>
@@ -326,17 +350,29 @@ const Clientes = () => {
 
       {!cargando && clientes.length > 0 && (
         <>
-          <Row className="g-4">
-            {clientesPaginados.map((cliente) => (
-              <Col key={cliente.id_cliente} xs={12} sm={6} md={4} lg={3} xl={3}>
-                <TarjetaCliente
-                  cliente={cliente}
+          {vistaActual === "tarjeta" ? (
+            <Row className="g-4">
+              {clientesPaginados.map((cliente) => (
+                <Col key={cliente.id_cliente} xs={12} sm={6} md={4} lg={3} xl={3}>
+                  <TarjetaCliente
+                    cliente={cliente}
+                    abrirModalEdicion={abrirModalEdicion}
+                    abrirModalEliminacion={abrirModalEliminacion}
+                  />
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <Row>
+              <Col>
+                <TablaClientes
+                  clientes={clientesPaginados}
                   abrirModalEdicion={abrirModalEdicion}
                   abrirModalEliminacion={abrirModalEliminacion}
                 />
               </Col>
-            ))}
-          </Row>
+            </Row>
+          )}
           <Row className="mt-4">
             <Col>
               <Paginacion

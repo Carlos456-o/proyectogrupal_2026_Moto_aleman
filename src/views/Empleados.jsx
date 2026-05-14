@@ -7,10 +7,12 @@ import TarjetaEmpleado from "../components/Empleados/TarjetaEmpleado";
 import ModalEdicionEmpleado from "../components/Empleados/ModalEdicionEmpleados";
 import ModalEliminacionEmpleado from "../components/Empleados/ModalEliminacionEmpleados";
 import CuadroBusquedas from "../components/busquedas/CuadroBusquedas";
+import TablaEmpleados from "../components/Empleados/TablaEmpleados";
 import { Alert } from "react-bootstrap";
 import Paginacion from "../components/ordenamiento/Paginacion";
 
 const Empleados = () => {
+  const [vistaActual, setVistaActual] = useState("tarjeta"); // "tarjeta" o "tabla"
   const [toast, setToast] = useState({ mostrar: false, mensaje: "", tipo: "" });
   const [mostrarModal, setMostrarModal] = useState(false);
 
@@ -297,7 +299,7 @@ const Empleados = () => {
       </Row>
 
       {/* Cuadro de búsqueda debajo de la línea divisoria */}
-      <Row className="mb-4 align-items-center">
+      <Row className="mb-4 align-items-center gap-2">
         <Col md={6} lg={5}>
           <CuadroBusquedas
             textoBusqueda={textoBusqueda}
@@ -305,7 +307,29 @@ const Empleados = () => {
             placeholder="Buscar por nombre o descripción..."
           />
         </Col>
-        <Col md={6} lg={7} className="text-end">
+        <Col md="auto">
+          <div className="btn-group" role="group">
+            <Button
+              variant={vistaActual === "tarjeta" ? "primary" : "outline-primary"}
+              onClick={() => setVistaActual("tarjeta")}
+              title="Vista de tarjetas"
+              className="d-none d-sm-inline-block"
+            >
+              <i className="bi bi-square-fill"></i>
+              <span className="d-none d-md-inline ms-2">Tarjetas</span>
+            </Button>
+            <Button
+              variant={vistaActual === "tabla" ? "primary" : "outline-primary"}
+              onClick={() => setVistaActual("tabla")}
+              title="Vista de tabla"
+              className="d-none d-sm-inline-block"
+            >
+              <i className="bi bi-table"></i>
+              <span className="d-none d-md-inline ms-2">Tabla</span>
+            </Button>
+          </div>
+        </Col>
+        <Col md="auto" className="ms-auto">
           <Button onClick={() => setMostrarModal(true)} size="md">
             <i className="bi-plus-lg"></i>
             <span className="d-none d-sm-inline ms-2">Nuevo Empleado</span>
@@ -338,24 +362,36 @@ const Empleados = () => {
       {/* Lista de empleados cargados */}
       {!cargando && empleados.length > 0 && (
         <>
-          <Row className="g-4">
-            {empleadosPaginados.map((empleado) => (
-              <Col
-                key={empleado.id_empleado}
-                xs={12}
-                sm={6}
-                md={4}
-                lg={3}
-                xl={3}
-              >
-                <TarjetaEmpleado
-                  empleado={empleado}
+          {vistaActual === "tarjeta" ? (
+            <Row className="g-4">
+              {empleadosPaginados.map((empleado) => (
+                <Col
+                  key={empleado.id_empleado}
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  lg={3}
+                  xl={3}
+                >
+                  <TarjetaEmpleado
+                    empleado={empleado}
+                    abrirModalEdicion={abrirModalEdicion}
+                    abrirModalEliminacion={abrirModalEliminación}
+                  />
+                </Col>
+              ))}
+            </Row>
+          ) : (
+            <Row>
+              <Col>
+                <TablaEmpleados
+                  empleados={empleadosPaginados}
                   abrirModalEdicion={abrirModalEdicion}
                   abrirModalEliminacion={abrirModalEliminación}
                 />
               </Col>
-            ))}
-          </Row>
+            </Row>
+          )}
           <Row className="mt-4">
             <Col>
               <Paginacion
