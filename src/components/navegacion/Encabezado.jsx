@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Container, Nav, Navbar, Offcanvas, Modal, Button } from "react-bootstrap";
+import {
+  Container,
+  Nav,
+  Navbar,
+  Offcanvas,
+  Modal,
+  Button,
+} from "react-bootstrap";
 import logo from "../../assets/logo.png";
 import { supabase } from "../../database/supabaseconfig";
 
@@ -89,6 +96,13 @@ const Encabezado = () => {
         >
           {mostrarMenu ? <i className="bi-bag-heart-fill me-2"></i> : null}{" "}
           <strong>Productos</strong>
+        </Nav.Link>
+        <Nav.Link
+          onClick={() => manejarNavegacion("/catalogo")}
+          className={mostrarMenu ? "color-texto-marca" : "text-black"}
+        >
+          {mostrarMenu ? <i className="bi-shop me-2"></i> : null}{" "}
+          <strong>Catálogo</strong>
         </Nav.Link>
         <Nav.Link
           onClick={() => manejarNavegacion("/Ventas")}
@@ -183,7 +197,8 @@ const Encabezado = () => {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            ¿Estás seguro de que deseas cerrar sesión? Tendrás que iniciar sesión nuevamente para acceder a la aplicación.
+            ¿Estás seguro de que deseas cerrar sesión? Tendrás que iniciar
+            sesión nuevamente para acceder a la aplicación.
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={cerrarConfirmacion}>
