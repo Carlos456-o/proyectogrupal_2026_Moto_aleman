@@ -399,6 +399,115 @@
   font-size: 24px;
 }
 
+/* Hero de inicio con moto y repuestos superpuestos */
+.hero-landing {
+  background: linear-gradient(90deg, #00b4d8 0%, #00a6c4 100%);
+  color: white;
+}
+
+.hero-text h1,
+.hero-text p {
+  color: white;
+}
+
+.hero-wrapper {
+  position: relative;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+}
+
+.hero-moto {
+  display: block;
+  width: 78%;
+  max-width: 520px;
+  height: auto;
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.hero-part {
+  position: absolute;
+  bottom: 1%;
+  left: 6%;
+  width: 120px;
+  max-width: 28%;
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.hero-part.part1 {
+  width: 350px;
+  max-width: 96%;
+}
+
+.hero-part.part2 {
+  left: 18%;
+  bottom: 0%;
+  width: 400px;
+  max-width: 90%;
+}
+
+/* Clases que disparan la animación al montar */
+.hero-moto.enter {
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+.hero-part.enter {
+  animation: slideInLeft 0.5s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  0% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+  .hero-moto {
+    width: 90%;
+  }
+
+  .hero-part {
+    width: 80px;
+    left: 4%;
+  }
+
+  .hero-part.part1 {
+    width: 320px;
+    max-width: 90%;
+  }
+
+  .hero-part.part2 {
+    width: 450px;
+    max-width: 90%;
+  }
+
+  .hero-text {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+}
+
 /* ===================== TARJETA DE CATÁLOGO ===================== */
 
 .tarjeta-catalogo {
@@ -497,6 +606,19 @@
 .numero-precio {
   font-size: 24px;
   color: #28a745;
+}
+
+/* Forzar fondo gris oscuro para el botón que abre el menú (Navbar.Toggle) */
+.navbar-toggler {
+  background-color: #007bff !important; /* azul */
+  color: #fff !important;
+  border: none !important;
+}
+.navbar-toggler:hover,
+.navbar-toggler:focus {
+  background-color: #81bcff !important;
+  color: #fff !important;
+  box-shadow: none !important;
 }
 
 .stock-info {

@@ -437,6 +437,7 @@ const Productos = () => {
         <Col>
           <h3 className="mb-0">
             <i className="bi bi-gear-wide-connected me-2 text-primary"></i>{" "}
+            
             Repuestos
           </h3>
         </Col>

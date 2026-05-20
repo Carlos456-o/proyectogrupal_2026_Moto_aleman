@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import logo from "./assets/logo.png";
 import Encabezado from "./components/navegacion/Encabezado";
 
 import Inicio from "./views/Inicio";
@@ -57,7 +56,6 @@ const App = () => {
           <Route path="*" element={<Pagina404 />} />
         </Routes>
       </main>
-      <div className="logo-fondo" style={{ backgroundImage: `url(${logo})` }} />
     </Router>
   );
 };

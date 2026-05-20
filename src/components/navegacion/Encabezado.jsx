@@ -159,6 +159,7 @@ const Encabezado = () => {
           <Offcanvas.Body>
             {contenidoMenu}
             {!esLogin && mostrarMenu && (
+              
               <div className="mt-3 p-3 rounded bg-light text-dark">
                 <p className="mb-2">
                   <i className="bi-envelope-fill me-2"></i>{" "}
