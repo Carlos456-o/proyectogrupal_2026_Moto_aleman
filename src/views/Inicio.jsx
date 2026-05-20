@@ -29,7 +29,10 @@ const Inicio = () => {
           <p className="lead">MOTO REPUESTOS ALEMAN
             <br />“Tu mejor opcion en repuestos de motos”
             <br />
-              En Moto Repuestos Aleman, nos apasiona el mundo de las motos y nos dedicamos a ofrecerte los mejores repuestos para tu vehículo. Con una amplia gama de productos de alta calidad. Ya sea que necesites piezas de motor, frenos, suspensión o accesorios. ¡Explora nuestro catálogo y encuentra los repuestos perfectos para tu moto hoy mismo! ¡Descubrenos!
+              En Moto Repuestos Aleman, nos apasiona el mundo de las motos y nos dedicamos a ofrecerte los mejores repuestos para tu vehículo. 
+              Con una amplia gama de productos de alta calidad. Ya sea que necesites piezas de motor, frenos, suspensión o accesorios. 
+              ¡Explora nuestro catálogo y encuentra los repuestos perfectos para tu moto hoy mismo! 
+              ¡Descubrenos!
           </p>
 
           <Button className="btn-primary">Leer Mas</Button>
