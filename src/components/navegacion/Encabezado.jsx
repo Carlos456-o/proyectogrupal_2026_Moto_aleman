@@ -136,7 +136,7 @@ const Encabezado = () => {
             className="d-inline-block me-2"
           />
           <strong>
-            <h4 className="mb-0">RevPartsPro</h4>
+            <h4 className="mb-0" style={{ color: "#ffd700" }}>RevPartsPro</h4>
           </strong>
         </Navbar.Brand>
 
