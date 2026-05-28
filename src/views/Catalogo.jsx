@@ -86,7 +86,10 @@ const Catalogo = () => {
   };
 
   return (
-    <Container style={{ marginTop: "2cm" }}>
+    <Container
+      style={{ marginTop: "2cm" }}
+      className="catalogo-fondo-rayas-rojas"
+    >
       {/* Notificación */}
       {toast.mostrar && (
         <NotificacionOperacion
