@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import FormularioLogin from "../components/login/FormularioLogin";
 import { supabase } from "../database/supabaseconfig";
+import './Login.css';
+import moto from '../assets/moto.png';
 
 const Login = () => {
 
@@ -39,22 +41,8 @@ const Login = () => {
     }
   }, [navegar]);
 
-  const estiloContenedor = {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "108%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "linear-gradient(135deg, #FFDEE9, #B5FFFC)",
-    overflow: "hidden",
-    padding: "20px"
-  };
-
   return (
-    <div style={estiloContenedor}>
+    <div className="login-page" style={{ backgroundImage: `url(${moto})` }}>
       <FormularioLogin
         usuario={usuario}
         contrasena={contrasena}
