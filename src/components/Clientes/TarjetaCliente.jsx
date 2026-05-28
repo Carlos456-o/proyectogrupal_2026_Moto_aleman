@@ -47,7 +47,7 @@ const TarjetaCliente = ({
             Editar
           </Button>
           <Button
-            variant="outline-danger"
+            variant="danger"
             size="sm"
             className="flex-fill"
             onClick={() => abrirModalEliminacion(cliente)}

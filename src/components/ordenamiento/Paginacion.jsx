@@ -64,7 +64,7 @@ for (let numeroPagina = paginaInicio; numeroPagina <= paginaFin; numeroPagina++)
 
   {/* Controles de paginación */}
   <Col className="d-flex justify-content-center">
-    <Pagination className="shadow-sm mt-2">
+    <Pagination className="shadow-sm mt-2 pagination-danger">
       <Pagination.First onClick={() => cambiarPagina(1)} disabled={paginaActual === 1} />
       <Pagination.Prev onClick={() => cambiarPagina(paginaActual - 1)} disabled={paginaActual === 1} />
       {paginaInicio > 1 && <Pagination.Ellipsis />}

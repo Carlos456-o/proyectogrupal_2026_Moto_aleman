@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import FormularioLogin from "../components/login/FormularioLogin";
 import { supabase } from "../database/supabaseconfig";
 import './Login.css';
-import moto from '../assets/moto.png';
 
 const Login = () => {
 
@@ -42,7 +41,7 @@ const Login = () => {
   }, [navegar]);
 
   return (
-    <div className="login-page" style={{ backgroundImage: `url(${moto})` }}>
+    <div className="login-page">
       <FormularioLogin
         usuario={usuario}
         contrasena={contrasena}

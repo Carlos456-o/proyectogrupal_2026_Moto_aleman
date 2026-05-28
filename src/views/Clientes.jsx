@@ -285,7 +285,7 @@ const Clientes = () => {
       <Row className="mb-3">
         <Col>
           <h3 className="mb-0">
-            <i className="bi-person-fill me-2 text-primary"></i> Clientes
+            <i className="bi-person-fill me-2 text-dark"></i> Clientes
           </h3>
         </Col>
       </Row>
@@ -301,7 +301,7 @@ const Clientes = () => {
         <Col md="auto">
           <div className="btn-group" role="group">
             <Button
-              variant={vistaActual === "tarjeta" ? "primary" : "outline-primary"}
+              variant={vistaActual === "tarjeta" ? "danger" : "outline-danger"}
               onClick={() => setVistaActual("tarjeta")}
               title="Vista de tarjetas"
               className="d-none d-sm-inline-block"
@@ -310,7 +310,7 @@ const Clientes = () => {
               <span className="d-none d-md-inline ms-2">Tarjetas</span>
             </Button>
             <Button
-              variant={vistaActual === "tabla" ? "primary" : "outline-primary"}
+              variant={vistaActual === "tabla" ? "danger" : "outline-danger"}
               onClick={() => setVistaActual("tabla")}
               title="Vista de tabla"
               className="d-none d-sm-inline-block"
@@ -321,7 +321,7 @@ const Clientes = () => {
           </div>
         </Col>
         <Col md="auto" className="ms-auto">
-          <Button onClick={() => setMostrarModal(true)} size="md">
+          <Button variant="danger" onClick={() => setMostrarModal(true)} size="md">
             <i className="bi-plus-lg"></i>
             <span className="d-none d-sm-inline ms-2">Nuevo Cliente</span>
           </Button>

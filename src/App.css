@@ -283,6 +283,30 @@
   min-width: 6rem;
 }
 
+.pagination-danger .page-link {
+  color: #ffffff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.pagination-danger .page-link:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+  color: #ffffff;
+}
+
+.pagination-danger .page-item.active .page-link {
+  background-color: #a71d2a;
+  border-color: #a71d2a;
+  color: #ffffff;
+}
+
+.pagination-danger .page-item.disabled .page-link {
+  color: #ffffff;
+  background-color: #e4606d;
+  border-color: #e4606d;
+}
+
 /* ===================== ESTILOS DEL CATÁLOGO ===================== */
 
 /* Contenedor principal del catálogo */

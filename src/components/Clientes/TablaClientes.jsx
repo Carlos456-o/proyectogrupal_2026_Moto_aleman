@@ -54,7 +54,7 @@ const TablaClientes = ({
                     <i className="bi bi-pencil"></i>
                   </Button>
                   <Button
-                    variant="outline-danger"
+                    variant="danger"
                     size="sm"
                     onClick={() => abrirModalEliminacion(cliente)}
                   >
