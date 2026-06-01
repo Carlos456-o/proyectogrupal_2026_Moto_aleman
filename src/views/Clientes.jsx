@@ -10,6 +10,7 @@ import CuadroBusquedas from "../components/busquedas/CuadroBusquedas";
 import { Alert } from "react-bootstrap";
 import TablaClientes from "../components/Clientes/TablaClientes";
 import Paginacion from "../components/ordenamiento/Paginacion";
+import BotonesReportes from "../components/Reportes/BotonesReportes";
 
 const Clientes = () => {
   const [vistaActual, setVistaActual] = useState("tabla"); // "tarjeta" o "tabla"
@@ -48,6 +49,15 @@ const Clientes = () => {
     (paginaActual - 1) * registrosPorPagina,
     paginaActual * registrosPorPagina,
   );
+
+  const columnasReporteClientes = [
+    { key: "id_cliente", label: "ID" },
+    { key: "nombre1", label: "Nombre 1" },
+    { key: "nombre2", label: "Nombre 2" },
+    { key: "apellidos1", label: "Apellido 1" },
+    { key: "apellidos2", label: "Apellido 2" },
+    { key: "cedula", label: "Cédula" },
+  ];
 
   const manejarBusqueda = (e) => {
     setTextoBusqueda(e.target.value);
@@ -319,6 +329,19 @@ const Clientes = () => {
               <span className="d-none d-md-inline ms-2">Tabla</span>
             </Button>
           </div>
+        </Col>
+        <Col md="auto">
+          <BotonesReportes
+            entidad="Clientes"
+            datos={clientesFiltrados}
+            columnas={columnasReporteClientes}
+            onSuccess={(mensaje) =>
+              setToast({ mostrar: true, mensaje, tipo: "exito" })
+            }
+            onError={(mensaje) =>
+              setToast({ mostrar: true, mensaje, tipo: "error" })
+            }
+          />
         </Col>
         <Col md="auto" className="ms-auto">
           <Button variant="danger" onClick={() => setMostrarModal(true)} size="md">

@@ -11,6 +11,7 @@ import ModalEliminacionProducto from "../components/Producto/ModalEliminacionPro
 import ModalEdicionProducto from "../components/Producto/ModalEdicionProducto";
 import Paginacion from "../components/ordenamiento/Paginacion";
 import Empleados from "./Empleados";
+import BotonesReportes from "../components/Reportes/BotonesReportes";
 
 const Productos = () => {
   const actualizarProducto = async () => {
@@ -244,6 +245,16 @@ const Productos = () => {
     (paginaActual - 1) * registrosPorPagina,
     paginaActual * registrosPorPagina,
   );
+
+  const columnasReporteProductos = [
+    { key: "id_producto", label: "ID" },
+    { key: "nombre_p", label: "Nombre" },
+    { key: "descripcion", label: "Descripción" },
+    { key: "cantidad", label: "Cantidad" },
+    { key: "disponible", label: "Disponible" },
+    { key: "preciocompra", label: "Precio compra" },
+    { key: "precioventa", label: "Precio venta" },
+  ];
 
   const manejoCambioInput = (e) => {
     const { name, value, type, checked } = e.target;
@@ -488,6 +499,19 @@ const Productos = () => {
               <span className="d-none d-md-inline ms-2">Tabla</span>
             </Button>
           </div>
+        </Col>
+        <Col md="auto">
+          <BotonesReportes
+            entidad="Productos"
+            datos={productosFiltrados}
+            columnas={columnasReporteProductos}
+            onSuccess={(mensaje) =>
+              setToast({ mostrar: true, mensaje, tipo: "exito" })
+            }
+            onError={(mensaje) =>
+              setToast({ mostrar: true, mensaje, tipo: "error" })
+            }
+          />
         </Col>
         <Col md="auto" className="ms-auto">
           <Button variant="danger" onClick={() => setMostrarModal(true)} size="md">
