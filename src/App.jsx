@@ -8,6 +8,7 @@ import Productos from "./views/Productos";
 import Empleados from "./views/Empleados";
 import Clientes from "./views/Clientes";
 import Catalogo from "./views/Catalogo";
+import Ventas from "./views/Ventas";
 import RutaProtegida from "./components/rutas/RutaProtegida";
 
 import Pagina404 from "./views/Pagina404";
@@ -49,6 +50,14 @@ const App = () => {
             element={
               <RutaProtegida>
                 <Productos />
+              </RutaProtegida>
+            }
+          />
+          <Route
+            path="/Ventas"
+            element={
+              <RutaProtegida>
+                <Ventas />
               </RutaProtegida>
             }
           />
