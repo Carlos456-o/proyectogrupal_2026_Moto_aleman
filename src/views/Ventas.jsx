@@ -69,16 +69,16 @@ const Ventas = () => {
     );
   };
 
-  const getVentaId = (venta) => getValue(venta, ["id_venta", "ID_Venta"]);
+  const getVentaId = (venta) =>
+    getValue(venta, ["id_detalle_venta", "ID_Detalle_Venta", "id"]);
 
   const getVentaGroupKey = (row) => {
-    const explicitSaleId = getVentaId(row);
-    if (explicitSaleId !== undefined && explicitSaleId !== null) {
-      return String(explicitSaleId);
-    }
-    const cliente = row.nombre_cliente || row.cliente || "";
-    const empleado = row.nombre_empleado || row.empleado || "";
-    const fecha = getFechaValue(row) || row.fecha || "";
+    const cliente =
+      row.nombre_cliente || row.Nombre_Cliente || row.cliente || "";
+    const empleado =
+      row.nombre_empleado || row.Nombre_Empleado || row.empleado || "";
+    const fecha =
+      getFechaValue(row) || row.Fecha || row.fecha || "";
     return `${cliente}|${empleado}|${fecha}`;
   };
 
@@ -94,46 +94,60 @@ const Ventas = () => {
       "ID_Producto",
       "producto_id",
       "idProducto",
+      "id",
     ]);
 
   const getFechaValue = (venta) =>
     getValue(venta, [
-      "fecha_venta",
       "fecha",
+      "Fecha",
+      "fecha_venta",
       "created_at",
       "createdAt",
-      "fecha",
     ]);
 
   const getProductoNombre = (row) =>
-    getValue(row, ["nombre_producto", "nombre_p", "nombreProducto", "nombre"]);
+    getValue(row, [
+      "nombre_p",
+      "Nombre_P",
+      "nombre_producto",
+      "nombreProducto",
+      "nombre",
+    ]);
 
   const groupDetalleVentas = (rows) => {
     const groups = {};
 
     rows.forEach((row) => {
       const saleKey = getVentaGroupKey(row);
-      const saleId =
-        getVentaId(row) ??
-        getValue(row, ["id_detalle_venta", "id_detalle_ven", "id"]);
+      const saleId = getVentaId(row);
       if (!groups[saleKey]) {
         groups[saleKey] = {
-          id_venta: saleId,
-          clienteNombre: row.nombre_cliente || row.cliente || "",
-          empleadoNombre: row.nombre_empleado || row.empleado || "",
-          fecha: getFechaValue(row),
+          id_detalle_venta: saleId,
+          clienteNombre:
+            row.nombre_cliente || row.Nombre_Cliente || row.cliente || "",
+          empleadoNombre:
+            row.nombre_empleado || row.Nombre_Empleado || row.empleado || "",
+          fecha:
+            getFechaValue(row) || row.Fecha || row.fecha || "",
           cantidadTotal: 0,
           subtotal: 0,
           detalles: [],
         };
       }
 
-      const cantidad = Number(row.cantidad ?? row.cantidad_ven ?? 0);
-      const subtotal = Number(row.total_venta ?? row.subtotal ?? 0);
+      const cantidad = Number(
+        row.cantidad ?? row.Cantidad ?? row.cantidad_ven ?? 0,
+      );
+      const subtotal = Number(
+        row.total_venta ?? row.Total_Venta ?? row.subtotal ?? 0,
+      );
       const producto = productos.find(
         (p) =>
           String(getValue(p, ["id_producto", "ID_Producto", "id"])) ===
-          String(getValue(row, ["id_producto", "ID_Producto", "id_producto"])),
+          String(
+            getValue(row, ["id_producto", "ID_Producto", "producto_id"]),
+          ),
       );
 
       groups[saleKey].cantidadTotal += cantidad;
@@ -143,6 +157,8 @@ const Ventas = () => {
         nombreProducto:
           getProductoNombre(row) ||
           producto?.nombreProducto ||
+          producto?.Nombre_P ||
+          producto?.nombre_p ||
           producto?.nombre ||
           "",
       });
@@ -254,10 +270,19 @@ const Ventas = () => {
 
       const productosNorm = (pRes.data || []).map((producto) => ({
         ...producto,
+        id_producto:
+          producto.id_producto ?? producto.ID_Producto ?? producto.id,
         nombreProducto:
-          producto.nombre_p || producto.nombre_producto || producto.nombre,
+          producto.nombre_p ??
+          producto.Nombre_P ??
+          producto.nombre_producto ??
+          producto.nombre,
         precioVenta:
-          producto.precioventa ?? producto.precio_venta ?? producto.precio,
+          producto.precio_ven ??
+          producto.Precio_Ven ??
+          producto.precioventa ??
+          producto.precio_venta ??
+          producto.precio,
       }));
 
       setClientes(clientesNorm);
@@ -456,12 +481,6 @@ const Ventas = () => {
     );
   };
 
-  const generarIdVenta = () => {
-    const timestamp = Date.now() % 1000000;
-    const randomPart = Math.floor(Math.random() * 900) + 100;
-    return Number(`${timestamp}${randomPart}`);
-  };
-
   const guardarVenta = async () => {
     if (detalles.length === 0) {
       setToast({
@@ -473,15 +492,6 @@ const Ventas = () => {
     }
 
     try {
-      const saleId = ventaAEditar
-        ? getValue(ventaAEditar, [
-            "id_venta",
-            "ID_Venta",
-            "id_detalle_venta",
-            "id_detalle_ven",
-            "id",
-          ])
-        : generarIdVenta();
       const clienteNombre =
         clienteSeleccionado?.nombreCompleto ||
         formateaNombreCliente(clienteSeleccionado) ||
@@ -493,33 +503,44 @@ const Ventas = () => {
       const fechaVentaValue = fechaVenta;
 
       if (ventaAEditar) {
-        const deleteQuery = supabase.from("detalle_ventas");
-        const deleteKey = getValue(ventaAEditar, ["id_venta", "ID_Venta"])
-          ? "id_venta"
-          : "id_detalle_venta";
-        const { error: deleteError } = await deleteQuery
+        const clienteNombrePrev =
+          ventaAEditar.clienteNombre ||
+          ventaAEditar.nombre_cliente ||
+          ventaAEditar.Nombre_Cliente ||
+          ventaAEditar.cliente ||
+          "";
+        const empleadoNombrePrev =
+          ventaAEditar.empleadoNombre ||
+          ventaAEditar.nombre_empleado ||
+          ventaAEditar.Nombre_Empleado ||
+          ventaAEditar.empleado ||
+          "";
+        const fechaPrev =
+          getFechaValue(ventaAEditar) ||
+          ventaAEditar.Fecha ||
+          ventaAEditar.fecha ||
+          "";
+
+        const { error: deleteError } = await supabase
+          .from("detalle_ventas")
           .delete()
-          .eq(deleteKey, saleId);
+          .eq("nombre_cliente", clienteNombrePrev)
+          .eq("nombre_empleado", empleadoNombrePrev)
+          .eq("fecha", fechaPrev);
+
         if (deleteError) throw deleteError;
       }
 
-      const detallesInsert = detalles.map((d) => {
-        const row = {
-          nombre_cliente: clienteNombre,
-          nombre_empleado: empleadoNombre,
-          id_producto: d.id_producto,
-          cantidad: d.cantidad,
-          precio_ven: d.precio,
-          total_venta: d.cantidad * d.precio,
-          fecha: fechaVenta,
-        };
-
-        if (saleId) {
-          row.id_venta = saleId;
-        }
-
-        return row;
-      });
+      const detallesInsert = detalles.map((d) => ({
+        Nombre_Cliente: clienteNombre,
+        Nombre_Empleado: empleadoNombre,
+        ID_Producto: d.id_producto,
+        Nombre_P: d.nombre_producto,
+        Cantidad: d.cantidad,
+        Precio_Ven: d.precio,
+        Total_Venta: d.cantidad * d.precio,
+        Fecha: fechaVentaValue,
+      }));
 
       let { error: insertError } = await supabase
         .from("detalle_ventas")
