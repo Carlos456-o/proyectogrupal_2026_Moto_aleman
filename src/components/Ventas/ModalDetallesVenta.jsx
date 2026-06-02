@@ -9,24 +9,37 @@ const ModalDetallesVenta = ({ mostrar, onCerrar, venta }) => {
       <Modal.Header closeButton>
         <Modal.Title>
           Detalles de la venta #
-          {venta.id_venta ?? venta.id_detalle_venta ?? venta.id}
+          {venta.id_detalle_venta ??
+            venta.ID_Detalle_Venta ??
+            venta.id_venta ??
+            venta.id}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Row className="mb-3">
           <Col>
             <strong>Cliente:</strong>{" "}
-            {venta.clienteNombre || venta.nombre_cliente || "-"}
+            {venta.clienteNombre ||
+              venta.nombre_cliente ||
+              venta.Nombre_Cliente ||
+              "-"}
           </Col>
           <Col>
             <strong>Empleado:</strong>{" "}
-            {venta.empleadoNombre || venta.nombre_empleado || "-"}
+            {venta.empleadoNombre ||
+              venta.nombre_empleado ||
+              venta.Nombre_Empleado ||
+              "-"}
           </Col>
         </Row>
         <Row className="mb-3">
           <Col>
             <strong>Fecha:</strong>{" "}
-            {venta.fecha ? new Date(venta.fecha).toLocaleString("es-NI") : "-"}
+            {venta.fecha
+              ? new Date(venta.fecha).toLocaleDateString("es-NI")
+              : venta.Fecha
+                ? new Date(venta.Fecha).toLocaleDateString("es-NI")
+                : "-"}
           </Col>
           <Col>
             <strong>Cantidad total:</strong>{" "}
@@ -34,7 +47,9 @@ const ModalDetallesVenta = ({ mostrar, onCerrar, venta }) => {
           </Col>
           <Col>
             <strong>Subtotal:</strong> C${" "}
-            {parseFloat(venta.subtotal ?? venta.total_venta ?? 0).toFixed(2)}
+            {parseFloat(
+              venta.subtotal ?? venta.total_venta ?? venta.Total_Venta ?? 0,
+            ).toFixed(2)}
           </Col>
         </Row>
 
@@ -53,8 +68,9 @@ const ModalDetallesVenta = ({ mostrar, onCerrar, venta }) => {
               <tr key={index}>
                 <td>
                   {item.nombreProducto ||
-                    item.nombre_producto ||
+                    item.Nombre_P ||
                     item.nombre_p ||
+                    item.nombre_producto ||
                     "-"}
                 </td>
                 <td>
@@ -63,16 +79,20 @@ const ModalDetallesVenta = ({ mostrar, onCerrar, venta }) => {
                     item.producto_id ??
                     "-"}
                 </td>
-                <td>{item.cantidad ?? item.cantidad_ven ?? "-"}</td>
                 <td>
-                  C${" "}
-                  {parseFloat(item.precio_ven ?? item.precio ?? 0).toFixed(2)}
+                  {item.Cantidad ?? item.cantidad ?? item.cantidad_ven ?? "-"}
                 </td>
                 <td>
                   C${" "}
-                  {parseFloat(item.total_venta ?? item.subtotal ?? 0).toFixed(
-                    2,
-                  )}
+                  {parseFloat(
+                    item.Precio_Ven ?? item.precio_ven ?? item.precio ?? 0,
+                  ).toFixed(2)}
+                </td>
+                <td>
+                  C${" "}
+                  {parseFloat(
+                    item.Total_Venta ?? item.total_venta ?? item.subtotal ?? 0,
+                  ).toFixed(2)}
                 </td>
               </tr>
             ))}

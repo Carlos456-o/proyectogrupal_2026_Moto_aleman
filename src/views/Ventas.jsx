@@ -77,8 +77,7 @@ const Ventas = () => {
       row.nombre_cliente || row.Nombre_Cliente || row.cliente || "";
     const empleado =
       row.nombre_empleado || row.Nombre_Empleado || row.empleado || "";
-    const fecha =
-      getFechaValue(row) || row.Fecha || row.fecha || "";
+    const fecha = getFechaValue(row) || row.Fecha || row.fecha || "";
     return `${cliente}|${empleado}|${fecha}`;
   };
 
@@ -128,8 +127,7 @@ const Ventas = () => {
             row.nombre_cliente || row.Nombre_Cliente || row.cliente || "",
           empleadoNombre:
             row.nombre_empleado || row.Nombre_Empleado || row.empleado || "",
-          fecha:
-            getFechaValue(row) || row.Fecha || row.fecha || "",
+          fecha: getFechaValue(row) || row.Fecha || row.fecha || "",
           cantidadTotal: 0,
           subtotal: 0,
           detalles: [],
@@ -145,9 +143,7 @@ const Ventas = () => {
       const producto = productos.find(
         (p) =>
           String(getValue(p, ["id_producto", "ID_Producto", "id"])) ===
-          String(
-            getValue(row, ["id_producto", "ID_Producto", "producto_id"]),
-          ),
+          String(getValue(row, ["id_producto", "ID_Producto", "producto_id"])),
       );
 
       groups[saleKey].cantidadTotal += cantidad;
@@ -547,10 +543,16 @@ const Ventas = () => {
         .insert(detallesInsert);
 
       if (insertError && ["42703", "PGRST204"].includes(insertError.code)) {
-        const fallbackInsert = detallesInsert.map((row) => {
-          const { id_venta, ...rest } = row;
-          return rest;
-        });
+        const fallbackInsert = detallesInsert.map((row) => ({
+          nombre_cliente: row.Nombre_Cliente,
+          nombre_empleado: row.Nombre_Empleado,
+          id_producto: row.ID_Producto,
+          nombre_p: row.Nombre_P,
+          cantidad: row.Cantidad,
+          precio_ven: row.Precio_Ven,
+          total_venta: row.Total_Venta,
+          fecha: row.Fecha,
+        }));
         const fallbackResult = await supabase
           .from("detalle_ventas")
           .insert(fallbackInsert);
@@ -666,8 +668,6 @@ const Ventas = () => {
         eliminarDetalle={eliminarDetalle}
         actualizarCantidad={actualizarCantidad}
         guardarVenta={guardarVenta}
-        fechaVenta={fechaVenta}
-        setFechaVenta={setFechaVenta}
         ventaAEditar={ventaAEditar}
       />
 

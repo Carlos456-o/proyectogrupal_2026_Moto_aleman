@@ -25,7 +25,11 @@ const TablaVentas = ({ ventas, verDetalles }) => {
             }
           >
             <td>
-              {venta.id_detalle_venta ?? venta.ID_Detalle_Venta ?? venta.id_venta ?? venta.id ?? "-"}
+              {venta.id_detalle_venta ??
+                venta.ID_Detalle_Venta ??
+                venta.id_venta ??
+                venta.id ??
+                "-"}
             </td>
             <td>
               {venta.clienteNombre ||
@@ -38,14 +42,16 @@ const TablaVentas = ({ ventas, verDetalles }) => {
             <td>{venta.cantidadTotal ?? venta.cantidad_total ?? "-"}</td>
             <td>
               C${" "}
-              {parseFloat(venta.subtotal ?? venta.total_venta ?? venta.Total_Venta ?? 0).toFixed(2)}
+              {parseFloat(
+                venta.subtotal ?? venta.total_venta ?? venta.Total_Venta ?? 0,
+              ).toFixed(2)}
             </td>
             <td>
               {venta.fecha
                 ? new Date(venta.fecha).toLocaleDateString("es-NI")
                 : venta.Fecha
-                ? new Date(venta.Fecha).toLocaleDateString("es-NI")
-                : "-"}
+                  ? new Date(venta.Fecha).toLocaleDateString("es-NI")
+                  : "-"}
             </td>
             <td>
               <Button
