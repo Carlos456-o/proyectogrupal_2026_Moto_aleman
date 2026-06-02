@@ -111,7 +111,17 @@ const Encabezado = () => {
           {mostrarMenu ? <i className="bi-images me-2"></i> : null}{" "}
           <strong>Ventas</strong>
         </Nav.Link>
+
+          <Nav.Link
+          onClick={() => manejarNavegacion("/Dashboard")}
+          className={mostrarMenu ? "color-texto-marca" : "text-black"}
+        >
+          {mostrarMenu ? <i className="bi-images me-2"></i> : null}{" "}
+          <strong>Dashboard</strong>
+        </Nav.Link>
       </Nav>
+
+      
     );
   }
 

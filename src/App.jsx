@@ -10,6 +10,7 @@ import Empleados from "./views/Empleados";
 import Clientes from "./views/Clientes";
 import Catalogo from "./views/Catalogo";
 import Ventas from "./views/Ventas";
+import Dashboard from "./components/Dashboard";
 import RutaProtegida from "./components/rutas/RutaProtegida";
 
 import Pagina404 from "./views/Pagina404";
@@ -60,6 +61,14 @@ const App = () => {
             element={
               <RutaProtegida>
                 <Ventas />
+              </RutaProtegida>
+            }
+          />
+          <Route
+            path="/Dashboard"
+            element={
+              <RutaProtegida>
+                <Dashboard />
               </RutaProtegida>
             }
           />
