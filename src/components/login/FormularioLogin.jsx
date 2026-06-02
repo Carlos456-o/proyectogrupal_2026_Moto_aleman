@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import logoImg from '../../assets/logo.png';
 
-const FormularioLogin = ({ usuario, contrasena, error, setUsuario, setContrasena, iniciarSesion }) => {
+const FormularioLogin = ({ usuario, contrasena, error, setUsuario, setContrasena, iniciarSesion, onCrearCuenta }) => {
   const [showPass, setShowPass] = useState(false);
   const [remember, setRemember] = useState(true);
 
@@ -33,7 +33,7 @@ const FormularioLogin = ({ usuario, contrasena, error, setUsuario, setContrasena
         </div>
 
         <div className="row actions">
-          <label className="remember"><input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} /> Recordarme</label>
+          <label className="remember"><input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} /> Bienvenidos</label>
           <a className="forgot" href="#">¿Olvidaste tu contraseña?</a>
         </div>
 
@@ -41,7 +41,7 @@ const FormularioLogin = ({ usuario, contrasena, error, setUsuario, setContrasena
 
         <div className="divider" />
 
-        <button className="secondary-btn">Acceso para empleados</button>
+        <button className="secondary-btn" onClick={onCrearCuenta}> 👤 Crear Cuenta </button>
 
         <div className="footer">© 2025 <span className="brand-name">RevPartsPro</span> - Todos los derechos reservados.</div>
       </div>

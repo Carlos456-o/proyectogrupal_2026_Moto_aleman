@@ -27,11 +27,11 @@ const BotonesReportes = ({ entidad, datos, columnas, onSuccess, onError }) => {
 
   return (
     <div className="d-flex gap-2">
-      <Button variant="outline-secondary" size="md" onClick={() => exportar("pdf")}> 
+      <Button className="btn-report" variant="outline-secondary" size="md" onClick={() => exportar("pdf")}> 
         <i className="bi bi-file-earmark-pdf-fill"></i>
         <span className="d-none d-md-inline ms-2">PDF</span>
       </Button>
-      <Button variant="outline-secondary" size="md" onClick={() => exportar("excel")}> 
+      <Button className="btn-report" variant="outline-secondary" size="md" onClick={() => exportar("excel")}> 
         <i className="bi bi-filetype-xlsx"></i>
         <span className="d-none d-md-inline ms-2">Excel</span>
       </Button>

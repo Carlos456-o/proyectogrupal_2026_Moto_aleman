@@ -67,6 +67,32 @@
   margin-bottom:12px;
 }
 
+.message-error{
+  background: rgba(255,50,50,0.09);
+  color: #ffb3b3;
+  border: 1px solid rgba(255,50,50,0.25);
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.message-success{
+  background: rgba(132, 255, 173, 0.12);
+  color: #d4f7b9;
+  border: 1px solid rgba(83, 255, 144, 0.25);
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin-bottom: 14px;
+  text-align: left;
+}
+
+.subtitle{
+  color: #f7c24a;
+  margin-bottom: 18px;
+  font-size: 0.95rem;
+}
+
 .field-label{
   display:block;
   text-align:left;

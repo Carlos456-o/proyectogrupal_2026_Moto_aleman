@@ -33,6 +33,10 @@ const Login = () => {
     }
   }
 
+  const irRegistro = () => {
+    navegar("/registro");
+  };
+
   useEffect(() => {
     const usuarioGuardado = localStorage.getItem("usuario-supabase");
     if (usuarioGuardado) {
@@ -49,6 +53,7 @@ const Login = () => {
         setUsuario={setUsuario}
         setContrasena={setContrasena}
         iniciarSesion={iniciarSesion}
+        onCrearCuenta={irRegistro}
       />
     </div>
   );

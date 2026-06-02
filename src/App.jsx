@@ -4,6 +4,7 @@ import Encabezado from "./components/navegacion/Encabezado";
 
 import Inicio from "./views/Inicio";
 import Login from "./views/Login";
+import Registro from "./views/Registro";
 import Productos from "./views/Productos";
 import Empleados from "./views/Empleados";
 import Clientes from "./views/Clientes";
@@ -21,6 +22,7 @@ const App = () => {
       <main className="margen-superior-main">
         <Routes>
           <Route path="/login" element={<Login />} />
+          <Route path="/registro" element={<Registro />} />
           <Route
             path="/"
             element={
