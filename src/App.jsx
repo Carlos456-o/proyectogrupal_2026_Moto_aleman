@@ -1,4 +1,5 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 import Encabezado from "./components/navegacion/Encabezado";
 
@@ -16,11 +17,31 @@ import RutaProtegida from "./components/rutas/RutaProtegida";
 import Pagina404 from "./views/Pagina404";
 import "./App.css";
 
-const App = () => {
+const AppContent = () => {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+  const whiteBgRoutes = [
+    "/clientes",
+    "/empleados",
+    "/ventas",
+    "/productos",
+    "/catalogo",
+    "/dashboard",
+  ];
+  const isWhitePage = whiteBgRoutes.includes(location.pathname.toLowerCase());
+
+  useEffect(() => {
+    if (isWhitePage) {
+      document.body.classList.add("white-page");
+    } else {
+      document.body.classList.remove("white-page");
+    }
+  }, [isWhitePage]);
+
   return (
-    <Router>
+    <>
       <Encabezado />
-      <main className="margen-superior-main">
+      <main className={`margen-superior-main${isHome ? " home-page" : ""}${isWhitePage ? " white-page" : ""}`}>
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/registro" element={<Registro />} />
@@ -76,8 +97,14 @@ const App = () => {
           <Route path="*" element={<Pagina404 />} />
         </Routes>
       </main>
-    </Router>
+    </>
   );
 };
+
+const App = () => (
+  <Router>
+    <AppContent />
+  </Router>
+);
 
 export default App;

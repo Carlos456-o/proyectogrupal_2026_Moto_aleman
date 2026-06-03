@@ -237,6 +237,47 @@
   padding: 0 1rem;
 }
 
+.margen-superior-main.home-page {
+  max-width: none;
+  padding: 0;
+}
+
+.margen-superior-main.white-page {
+  background-color: #ffffff;
+  color: #000000;
+  max-width: none;
+  min-height: 100vh;
+  padding: 0;
+}
+
+body.white-page {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+body.white-page .navbar,
+body.white-page .color-navbar,
+body.white-page .navbar-nav .nav-link,
+body.white-page .navbar-brand,
+body.white-page .btn-outline-danger {
+  color: inherit;
+}
+
+.margen-superior-main.white-page a,
+.margen-superior-main.white-page .nav-link,
+.margen-superior-main.white-page h1,
+.margen-superior-main.white-page h2,
+.margen-superior-main.white-page p,
+.margen-superior-main.white-page span,
+.margen-superior-main.white-page label {
+  color: #000000;
+}
+
+.margen-superior-main.white-page .container,
+.margen-superior-main.white-page .container-fluid {
+  max-width: none;
+}
+
 .margen-superior-main .container,
 .margen-superior-main .container-fluid {
   max-width: 1200px;
@@ -1137,6 +1178,7 @@
   background-color: var(--color-negro);
   color: var(--color-blanco);
   overflow-x: hidden;
+  width: 100%;
 }
 
 /* SECCIÓN HERO */
@@ -1148,6 +1190,19 @@
   padding: 60px 0;
   position: relative;
   overflow: hidden;
+  width: 100vw;
+  max-width: 100vw;
+  left: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  padding: 0 40px;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 /* Decoración de fondo diagonal roja */
@@ -1162,13 +1217,6 @@
   transform: skewX(-20deg);
   pointer-events: none;
   z-index: 0;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-  padding: 0 40px;
-  max-width: 1200px;
 }
 
 .hero-text {
