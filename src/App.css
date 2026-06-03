@@ -199,17 +199,18 @@
 .dashboard-container {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: stretch;
   width: 100%;
-  margin-top: 12rem;
+  margin-top: 8rem;
   margin-bottom: 1.5rem;
   padding: 0 1rem;
 }
 
 .dashboard-card {
-  width: min(100%, 1100px);
-  height: 600px;
-  min-height: 600px;
+  width: 100%;
+  max-width: 1200px;
+  min-height: 75vh;
+  height: min(75vh, 900px);
   border-radius: 18px;
   box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -230,6 +231,38 @@
 .margen-superior-main {
   position: relative;
   z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.margen-superior-main .container,
+.margen-superior-main .container-fluid {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.table,
+.table-responsive > .table {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.table-responsive {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.table-sm th,
+.table-sm td,
+.table th,
+.table td {
+  padding: 0.9rem 1rem;
+  white-space: normal;
 }
 
 /* Estilo nuevo para botones de acción */
@@ -242,6 +275,7 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease, color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
   box-shadow: 0 10px 26px rgba(0, 0, 0, 0.08);
 }
+
 
 .btn:hover,
 .btn:focus,
@@ -1134,7 +1168,7 @@
   position: relative;
   z-index: 2;
   padding: 0 40px;
-  max-width: 1400px;
+  max-width: 1200px;
 }
 
 .hero-text {
