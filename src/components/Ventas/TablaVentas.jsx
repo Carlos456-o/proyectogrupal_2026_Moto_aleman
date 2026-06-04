@@ -64,7 +64,7 @@ const TablaVentas = ({ ventas, verDetalles, editarVenta }) => {
                 </Button>
                 <Button
                   size="sm"
-                  variant="outline-secondary"
+                  variant="outline-warning"
                   onClick={() => editarVenta(venta)}
                 >
                   Editar

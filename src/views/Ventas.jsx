@@ -5,6 +5,7 @@ import NotificacionOperacion from "../components/NotificacionOperacion";
 import FormularioVenta from "../components/Ventas/FormularioVenta";
 import TablaVentas from "../components/Ventas/TablaVentas";
 import ModalDetallesVenta from "../components/Ventas/ModalDetallesVenta";
+import BotonesReportes from "../components/Reportes/BotonesReportes";
 import CuadroBusquedas from "../components/busquedas/CuadroBusquedas";
 import Paginacion from "../components/ordenamiento/Paginacion";
 
@@ -34,6 +35,15 @@ const Ventas = () => {
   const [paginaActual, establecerPaginaActual] = useState(1);
   const [ventaSeleccionada, setVentaSeleccionada] = useState(null);
   const [mostrarDetalles, setMostrarDetalles] = useState(false);
+
+  const columnasReporteVentas = [
+    { key: "id_detalle_venta", label: "ID Venta" },
+    { key: "clienteNombre", label: "Cliente" },
+    { key: "empleadoNombre", label: "Empleado" },
+    { key: "cantidadTotal", label: "Cantidad total" },
+    { key: "subtotal", label: "Subtotal" },
+    { key: "fecha", label: "Fecha" },
+  ];
 
   const ventasPaginadas = useMemo(
     () =>
@@ -599,6 +609,15 @@ const Ventas = () => {
             textoBusqueda={textoBusqueda}
             manejarCambioBusqueda={manejarBusqueda}
             placeholder="Buscar por cliente, empleado o ID..."
+          />
+        </Col>
+        <Col md="auto">
+          <BotonesReportes
+            entidad="Ventas"
+            datos={ventasFiltradas}
+            columnas={columnasReporteVentas}
+            onSuccess={(mensaje) => setToast({ mostrar: true, mensaje, tipo: "exito" })}
+            onError={(mensaje) => setToast({ mostrar: true, mensaje, tipo: "error" })}
           />
         </Col>
         <Col md="auto" className="ms-auto">
