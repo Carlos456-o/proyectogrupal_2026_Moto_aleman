@@ -201,7 +201,7 @@
   justify-content: center;
   align-items: stretch;
   width: 100%;
-  margin-top: 8rem;
+  margin-top: 10rem !important;
   margin-bottom: 1.5rem;
   padding: 0 1rem;
 }
@@ -234,7 +234,7 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 2.5rem 3rem;
 }
 
 .margen-superior-main.home-page {
@@ -247,7 +247,7 @@
   color: #000000;
   max-width: none;
   min-height: 100vh;
-  padding: 0;
+  padding: 2.5rem 3rem;
 }
 
 body.white-page {
@@ -528,6 +528,36 @@ body.white-page .btn-outline-danger {
 
 .alerta-sin-productos i {
   font-size: 24px;
+}
+
+.catalogo-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 576px) {
+  .catalogo-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 900px) {
+  .catalogo-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1200px) {
+  .catalogo-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1400px) {
+  .catalogo-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 }
 
 /* Hero de inicio con moto y repuestos superpuestos */

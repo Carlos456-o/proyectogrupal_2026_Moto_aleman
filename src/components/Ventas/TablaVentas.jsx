@@ -1,7 +1,7 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
 
-const TablaVentas = ({ ventas, verDetalles }) => {
+const TablaVentas = ({ ventas, verDetalles, editarVenta }) => {
   return (
     <Table striped bordered hover responsive className="align-middle">
       <thead>
@@ -54,13 +54,22 @@ const TablaVentas = ({ ventas, verDetalles }) => {
                   : "-"}
             </td>
             <td>
-              <Button
-                size="sm"
-                variant="outline-primary"
-                onClick={() => verDetalles(venta)}
-              >
-                Ver detalles
-              </Button>
+              <div className="d-flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline-primary"
+                  onClick={() => verDetalles(venta)}
+                >
+                  Ver detalles
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline-secondary"
+                  onClick={() => editarVenta(venta)}
+                >
+                  Editar
+                </Button>
+              </div>
             </td>
           </tr>
         ))}

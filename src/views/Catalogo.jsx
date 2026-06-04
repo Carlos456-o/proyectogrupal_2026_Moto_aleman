@@ -181,16 +181,16 @@ const Catalogo = () => {
           </Col>
         </Row>
       ) : (
-        <Row className="g-4">
+        <div className="catalogo-grid">
           {productosFiltradores.map((producto) => (
-            <Col key={producto.id_producto} xs={12} sm={6} lg={4} xl={3}>
+            <div key={producto.id_producto} className="catalogo-grid-item">
               <TarjetaCatalogo
                 producto={producto}
                 abrirDetalles={abrirDetalles}
               />
-            </Col>
+            </div>
           ))}
-        </Row>
+        </div>
       )}
 
       {/* Modal de Detalles */}

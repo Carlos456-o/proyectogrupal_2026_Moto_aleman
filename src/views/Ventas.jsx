@@ -631,6 +631,7 @@ const Ventas = () => {
               <TablaVentas
                 ventas={ventasPaginadas}
                 verDetalles={abrirDetalles}
+                editarVenta={abrirEdicion}
               />
             </Col>
           </Row>
