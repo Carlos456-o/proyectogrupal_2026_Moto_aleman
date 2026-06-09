@@ -1,69 +1,24 @@
 const {
-  validarClienteEdicion,
-  prepararDatosClienteActualizado,
+  validarCedulaEdicion,
+  construirCedulaActualizada,
 } = require("./actualizacionClientes");
-
-describe("CP-HF015 - Actualización de clientes", () => {
-  test("valida correctamente un cliente válido para edición", () => {
-    const cliente = {
-      nombre1: "Laura",
-      nombre2: "Isabel",
-      apellidos1: "Ramírez",
-      apellidos2: "González",
-      cedula: "1234567890",
-    };
-
-    const errores = validarClienteEdicion(cliente);
-
+describe("CP-HF015 - Validación de Cédula en Actualización de Cliente", () => {
+  test("Valida correctamente una cédula con formato XXX-XXXXXX-XXXXK (letra al final)", () => {
+    const errores = validarCedulaEdicion("121-000000-0000A");
     expect(errores).toHaveLength(0);
   });
-
-  test("devuelve errores cuando faltan campos obligatorios", () => {
-    const cliente = {
-      nombre1: "",
-      nombre2: "María",
-      apellidos1: "   ",
-      apellidos2: "Pérez",
-      cedula: "",
-    };
-
-    const errores = validarClienteEdicion(cliente);
-
-    expect(errores).toContain("El primer nombre del cliente es obligatorio");
-    expect(errores).toContain("El primer apellido del cliente es obligatorio");
+  test("Rechaza cédula con guiones en posiciones incorrectas", () => {
+    const errores = validarCedulaEdicion("12-1000000-0000A");
+    expect(errores).toContain('Cédula debe tener el formato: 121-000000-0000X');
   });
-
-  test("prepara correctamente los datos del cliente recortando espacios", () => {
-    const cliente = {
-      nombre1: "  Juan  ",
-      nombre2: "  Carlos  ",
-      apellidos1: "  Mendoza  ",
-      apellidos2: "  Díaz  ",
-      cedula: "  9876543210  ",
-    };
-
-    const datos = prepararDatosClienteActualizado(cliente);
-
-    expect(datos).toEqual({
-      nombre1: "Juan",
-      nombre2: "Carlos",
-      apellidos1: "Mendoza",
-      apellidos2: "Díaz",
-      cedula: "9876543210",
+  test("Rechaza cédula nula", () => {
+    const errores = validarCedulaEdicion(null);
+    expect(errores).toContain("Cédula es obligatoria");
+  });
+  test("Construye correctamente un objeto con la cédula actualizada", () => {
+    const construccion = construirCedulaActualizada("121-000000-0000A");
+    expect(construccion).toEqual({
+      cedula: "121-000000-0000A",
     });
-  });
-
-  test("permite actualizar cuando solo se completan los campos obligatorios", () => {
-    const cliente = {
-      nombre1: "Ana",
-      nombre2: "",
-      apellidos1: "Cuevas",
-      apellidos2: "",
-      cedula: "",
-    };
-
-    const errores = validarClienteEdicion(cliente);
-
-    expect(errores).toEqual([]);
   });
 });

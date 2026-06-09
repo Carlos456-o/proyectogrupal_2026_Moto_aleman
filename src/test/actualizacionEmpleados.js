@@ -1,37 +1,29 @@
 // Helpers para pruebas del flujo de actualización de empleados
 
-function validarEmpleadoEdicion(empleadoEditar) {
+function validarEstadoEdicion(estado) {
   const errors = [];
 
-  if (!empleadoEditar || typeof empleadoEditar !== "object") {
-    errors.push("Empleado inválido");
+  if (estado == null || estado === "") {
+    errors.push("Estado es obligatorio");
     return errors;
   }
 
-  if (!empleadoEditar.nombre || String(empleadoEditar.nombre).trim() === "") {
-    errors.push("El nombre del empleado es obligatorio");
-  }
-
-  if (!empleadoEditar.apellido || String(empleadoEditar.apellido).trim() === "") {
-    errors.push("El apellido del empleado es obligatorio");
-  }
-
-  if (!empleadoEditar.cargo || String(empleadoEditar.cargo).trim() === "") {
-    errors.push("El cargo del empleado es obligatorio");
+  // Validar que sea boolean o string "true"/"false"
+  if (typeof estado !== "boolean" && 
+      (String(estado).toLowerCase() !== "true" && String(estado).toLowerCase() !== "false")) {
+    errors.push("Estado debe ser true o false");
   }
 
   return errors;
 }
 
-function prepararDatosEmpleadoActualizado(empleadoEditar) {
+function construirEmpleadoActualizado(estado) {
   return {
-    nombre: String(empleadoEditar.nombre || "").trim(),
-    apellido: String(empleadoEditar.apellido || "").trim(),
-    cargo: String(empleadoEditar.cargo || "").trim(),
+    estado: typeof estado === "boolean" ? estado : String(estado).toLowerCase() === "true",
   };
 }
 
 module.exports = {
-  validarEmpleadoEdicion,
-  prepararDatosEmpleadoActualizado,
+  validarEstadoEdicion,
+  construirEmpleadoActualizado,
 };

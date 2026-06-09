@@ -1,69 +1,24 @@
 const {
-  validarRegistroCliente,
-  prepararClienteParaRegistro,
+  validarCedula,
+  construirCedula,
 } = require("./registroClientes");
-
-describe("CP-HF013 - Registro de clientes", () => {
-  test("valida un cliente con datos completos y opcionales", () => {
-    const cliente = {
-      nombre1: "Pedro",
-      nombre2: "Alberto",
-      apellidos1: "Hernández",
-      apellidos2: "Flores",
-      cedula: "9876543210",
-    };
-
-    const errores = validarRegistroCliente(cliente);
-
+describe("CP-HF013 - Validación de Cédula de Cliente", () => {
+  test("Valida correctamente una cédula con formato XXX-XXXXXX-XXXXD (dígito al final)", () => {
+    const errores = validarCedula("121-000000-00000");
     expect(errores).toHaveLength(0);
   });
-
-  test("detecta campos obligatorios incompletos", () => {
-    const cliente = {
-      nombre1: " ",
-      nombre2: "",
-      apellidos1: "",
-      apellidos2: "García",
-      cedula: "",
-    };
-
-    const errores = validarRegistroCliente(cliente);
-
-    expect(errores).toContain("El primer nombre del cliente es obligatorio");
-    expect(errores).toContain("El primer apellido del cliente es obligatorio");
+  test("Rechaza cédula sin guiones", () => {
+    const errores = validarCedula("121000000000A");
+    expect(errores).toContain('Cédula debe tener el formato: 121-000000-0000X');
   });
-
-  test("prepara los datos del cliente recortando espacios", () => {
-    const cliente = {
-      nombre1: "  Ana  ",
-      nombre2: "  María ",
-      apellidos1: " Torres  ",
-      apellidos2: "  Pérez",
-      cedula: "  1234567890  ",
-    };
-
-    const datos = prepararClienteParaRegistro(cliente);
-
-    expect(datos).toEqual({
-      nombre1: "Ana",
-      nombre2: "María",
-      apellidos1: "Torres",
-      apellidos2: "Pérez",
-      cedula: "1234567890",
+  test("Rechaza cédula vacía", () => {
+    const errores = validarCedula("");
+    expect(errores).toContain("Cédula es obligatoria");
+  });
+  test("Construye correctamente un objeto con la cédula", () => {
+    const construccion = construirCedula("121-000000-0000A");
+    expect(construccion).toEqual({
+      cedula: "121-000000-0000A",
     });
-  });
-
-  test("permite registro cuando solo se completan los campos obligatorios", () => {
-    const cliente = {
-      nombre1: "Lucía",
-      nombre2: "",
-      apellidos1: "Cruz",
-      apellidos2: "",
-      cedula: "",
-    };
-
-    const errores = validarRegistroCliente(cliente);
-
-    expect(errores).toHaveLength(0);
   });
 });

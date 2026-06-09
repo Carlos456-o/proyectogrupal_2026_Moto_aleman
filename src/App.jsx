@@ -14,6 +14,7 @@ import Ventas from "./views/Ventas";
 import Dashboard from "./components/Dashboard";
 import RutaProtegida from "./components/rutas/RutaProtegida";
 
+
 import Pagina404 from "./views/Pagina404";
 import "./App.css";
 

@@ -1,78 +1,55 @@
 // Helpers de ventas para pruebas unitarias
 
-function calcularTotalGeneral(detalles) {
-  if (!Array.isArray(detalles)) return 0;
-  return detalles.reduce((sum, detalle) => {
-    const cantidad = Number(detalle.cantidad || 0);
-    const precio = Number(detalle.precio || 0);
-    return sum + cantidad * precio;
-  }, 0);
-}
-
-function validarVenta(detalles) {
+function validarVenta(venta) {
   const errors = [];
 
-  if (!Array.isArray(detalles) || detalles.length === 0) {
-    errors.push("Agrega al menos un producto para registrar la venta");
+  if (!venta) {
+    errors.push("Venta inválida");
     return errors;
   }
 
-  detalles.forEach((detalle, index) => {
-    const cantidad = Number(detalle.cantidad);
-    const precio = Number(detalle.precio);
+  // Validar PrecioV: decimal ≥ 0.00
+  if (venta.precio_ven == null || venta.precio_ven === "") {
+    errors.push("PrecioV es obligatorio");
+  } else if (isNaN(Number(venta.precio_ven)) || Number(venta.precio_ven) < 0) {
+    errors.push("PrecioV debe ser un decimal ≥ 0.00");
+  }
 
-    if (!detalle.id_producto) {
-      errors.push(`Detalle ${index + 1}: Producto no válido`);
-    }
-    if (!detalle.nombre_producto) {
-      errors.push(`Detalle ${index + 1}: Nombre de producto requerido`);
-    }
-    if (Number.isNaN(cantidad) || cantidad <= 0) {
-      errors.push(`Detalle ${index + 1}: La cantidad debe ser un número positivo`);
-    }
-    if (Number.isNaN(precio) || precio <= 0) {
-      errors.push(`Detalle ${index + 1}: El precio debe ser un número positivo`);
-    }
-  });
+  // Validar TotalVenta: decimal ≥ 0.00
+  if (venta.total_venta == null || venta.total_venta === "") {
+    errors.push("TotalVenta es obligatorio");
+  } else if (isNaN(Number(venta.total_venta)) || Number(venta.total_venta) < 0) {
+    errors.push("TotalVenta debe ser un decimal ≥ 0.00");
+  }
+
+  // Validar Cantidad_ven: entero ≥ 0
+  if (venta.cantidad_ven == null || venta.cantidad_ven === "") {
+    errors.push("Cantidad_ven es obligatoria");
+  } else if (!Number.isInteger(Number(venta.cantidad_ven)) || Number(venta.cantidad_ven) < 0) {
+    errors.push("Cantidad_ven debe ser un entero ≥ 0");
+  }
+
+  // Validar disponible: true/false
+  if (venta.disponible == null || venta.disponible === "") {
+    errors.push("disponible es obligatorio");
+  } else if (typeof venta.disponible !== "boolean" && 
+             (String(venta.disponible).toLowerCase() !== "true" && String(venta.disponible).toLowerCase() !== "false")) {
+    errors.push("disponible debe ser true o false");
+  }
 
   return errors;
 }
 
-function agregarDetalle(prevDetalles, producto, cantidad) {
-  if (!producto || cantidad == null || Number(cantidad) <= 0) return prevDetalles;
-
-  const existente = prevDetalles.find((d) => d.id_producto === producto.id_producto);
-  if (existente) {
-    return prevDetalles.map((d) =>
-      d.id_producto === producto.id_producto
-        ? { ...d, cantidad: Number(d.cantidad) + Number(cantidad) }
-        : d,
-    );
-  }
-
-  return [
-    ...prevDetalles,
-    {
-      id_producto: producto.id_producto,
-      nombre_producto: producto.nombreProducto || producto.nombre_p || producto.nombre || "",
-      precio: Number(producto.precioVenta || producto.precio_ven || producto.precio || 0),
-      cantidad: Number(cantidad),
-    },
-  ];
-}
-
-function actualizarCantidad(prevDetalles, id_producto, nuevaCantidad) {
-  if (Number(nuevaCantidad) <= 0) return prevDetalles;
-  return prevDetalles.map((detalle) =>
-    detalle.id_producto === id_producto
-      ? { ...detalle, cantidad: Number(nuevaCantidad) }
-      : detalle,
-  );
+function construirVenta(venta) {
+  return {
+    precio_ven: parseFloat(venta.precio_ven),
+    total_venta: parseFloat(venta.total_venta),
+    cantidad_ven: parseInt(venta.cantidad_ven, 10),
+    disponible: typeof venta.disponible === "boolean" ? venta.disponible : String(venta.disponible).toLowerCase() === "true",
+  };
 }
 
 module.exports = {
-  calcularTotalGeneral,
   validarVenta,
-  agregarDetalle,
-  actualizarCantidad,
+  construirVenta,
 };

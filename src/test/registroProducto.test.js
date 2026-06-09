@@ -6,69 +6,39 @@ jest.mock("../database/supabaseconfig", () => ({
     from: jest.fn(),
   },
 }));
-
 describe("Validación de producto", () => {
-  test("Debe requerir nombre, descripción, imagen", () => {
-    const producto = { cantidad: 1, preciocompra: 10, precioventa: 20 };
+  test("Debe validar que PrecioC sea decimal ≥ 0", () => {
+    const producto = { preciocompra: -5, precioventa: 10, cantidad: 5, disponible: true };
     const { valid, errors } = validateProducto(producto);
     expect(valid).toBe(false);
     expect(errors).toEqual(
-      expect.arrayContaining([
-        "El nombre es obligatorio",
-        "La descripción es obligatoria",
-        "La imagen del producto es obligatoria",
-      ]),
+      expect.arrayContaining(["PrecioC debe ser un decimal ≥ 0"]),
     );
   });
-
-  test("Precios deben ser positivos", () => {
-    const producto = {
-      nombre_p: "X",
-      descripcion: "d",
-      cantidad: 1,
-      preciocompra: -5,
-      precioventa: 0,
-      archivo: {},
-    };
+  test("Valida un producto correcto con disponible true", () => {
+    const producto = { preciocompra: 15.5, precioventa: 25.99, cantidad: 10, disponible: true };
+    const { valid, errors } = validateProducto(producto);
+    expect(valid).toBe(true);
+    expect(errors.length).toBe(0);
+  });
+  test("Retorna error cuando falta disponible", () => {
+    const producto = { preciocompra: 10, precioventa: 20, cantidad: 5 };
     const { valid, errors } = validateProducto(producto);
     expect(valid).toBe(false);
     expect(errors).toEqual(
-      expect.arrayContaining([
-        "El precio de compra debe ser un número positivo",
-        "El precio de venta debe ser un número positivo",
-      ]),
+      expect.arrayContaining(["disponible es obligatorio"]),
     );
   });
-
-  test("Cantidad debe ser positiva", () => {
-    const producto = {
-      nombre_p: "X",
-      descripcion: "d",
-      cantidad: 0,
-      preciocompra: 5,
-      precioventa: 10,
-      archivo: {},
-    };
-    const { valid, errors } = validateProducto(producto);
-    expect(valid).toBe(false);
-    expect(errors).toEqual(
-      expect.arrayContaining(["La cantidad debe ser un número positivo"]),
-    );
-  });
-
   test("Registro llama a supabase cuando es válido", async () => {
     const mockInsert = jest
       .fn()
       .mockResolvedValue({ data: [{ id: 1 }], error: null });
     supabase.from.mockReturnValue({ insert: mockInsert });
-
     const producto = {
-      nombre_p: "X",
-      descripcion: "d",
-      cantidad: 2,
-      preciocompra: 5,
-      precioventa: 10,
-      archivo: {},
+      preciocompra: 10,
+      precioventa: 20,
+      cantidad: 5,
+      disponible: true,
     };
     const res = await registerProducto(producto);
     expect(supabase.from).toHaveBeenCalledWith("productos");

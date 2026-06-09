@@ -14,11 +14,12 @@ const Registro = () => {
   const [mensaje, setMensaje] = useState(null);
   const [error, setError] = useState(null);
   const [registrando, setRegistrando] = useState(false);
+  const [tiempoEspera, setTiempoEspera] = useState(0);
 
   const navegar = useNavigate();
 
   const crearCuenta = async () => {
-    if (registrando) return;
+    if (registrando || tiempoEspera > 0) return;
 
     if (!aceptaTerminos) {
       setError("Debes aceptar los términos y condiciones.");
@@ -42,40 +43,77 @@ const Registro = () => {
     setError(null);
     setMensaje(null);
 
-    try {
-      const { error } = await supabase.auth.signUp(
-        {
-          email,
-          password: contrasena,
-        },
-        {
-          data: {
-            full_name: nombreCompleto,
-            username: usuario,
+    const intentarRegistro = async (intento = 1) => {
+      try {
+        const { error } = await supabase.auth.signUp(
+          {
+            email,
+            password: contrasena,
           },
-        }
-      );
+          {
+            data: {
+              full_name: nombreCompleto,
+              username: usuario,
+            },
+          }
+        );
 
-      if (error) {
-        setError(error.message);
+        if (error) {
+          // Si es error 429 (rate limit), reintentar
+          if (error.message.includes("rate limit") || error.message.includes("429")) {
+            if (intento < 5) {
+              // Delays más agresivos: 5s, 15s, 30s, 60s, 120s
+              const delays = [5000, 15000, 30000, 60000, 120000];
+              const espera = delays[intento - 1];
+              console.log(`Rate limit detectado. Reintentando en ${espera / 1000}s (intento ${intento + 1}/5)`);
+              setMensaje(`Rate limit detectado. Reintentando en ${espera / 1000}s (intento ${intento + 1}/5)...`);
+              await new Promise(resolve => setTimeout(resolve, espera));
+              return intentarRegistro(intento + 1);
+            }
+          }
+          
+          setError(error.message);
+          setMensaje(null);
+          setRegistrando(false);
+          setTiempoEspera(120); // 2 minutos de cooldown
+          const interval = setInterval(() => {
+            setTiempoEspera((prev) => {
+              if (prev <= 1) {
+                clearInterval(interval);
+                return 0;
+              }
+              return prev - 1;
+            });
+          }, 1000);
+          return;
+        }
+
+        setMensaje("Cuenta creada con éxito. Revisa tu correo para confirmar tu acceso.");
+        setError(null);
+        setRegistrando(false);
+
+        setTimeout(() => {
+          navegar("/login");
+        }, 2200);
+      } catch (err) {
+        console.error("Error al crear la cuenta:", err);
+        setError("No se pudo crear la cuenta en este momento. Intenta más tarde.");
         setMensaje(null);
         setRegistrando(false);
-        return;
+        setTiempoEspera(120); // 2 minutos de cooldown
+        const interval = setInterval(() => {
+          setTiempoEspera((prev) => {
+            if (prev <= 1) {
+              clearInterval(interval);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
       }
+    };
 
-      setMensaje("Cuenta creada con éxito. Revisa tu correo para confirmar tu acceso.");
-      setError(null);
-      setRegistrando(false);
-
-      setTimeout(() => {
-        navegar("/login");
-      }, 2200);
-    } catch (err) {
-      console.error("Error al crear la cuenta:", err);
-      setError("No se pudo crear la cuenta en este momento. Intenta más tarde.");
-      setMensaje(null);
-      setRegistrando(false);
-    }
+    intentarRegistro();
   };
 
   return (
@@ -126,8 +164,12 @@ const Registro = () => {
             <label className="remember"><input type="checkbox" checked={aceptaTerminos} onChange={(e) => setAceptaTerminos(e.target.checked)} /> Acepto los términos y condiciones</label>
           </div>
 
-          <button className="primary-btn" type="button" onClick={crearCuenta} disabled={registrando}>
-            {registrando ? "Creando cuenta..." : "CREAR CUENTA →"}
+          <button className="primary-btn" type="button" onClick={crearCuenta} disabled={registrando || tiempoEspera > 0}>
+            {registrando 
+              ? "Creando cuenta..." 
+              : tiempoEspera > 0
+              ? `Espera ${tiempoEspera}s...`
+              : "CREAR CUENTA →"}
           </button>
 
           <div className="divider" />

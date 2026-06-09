@@ -1,30 +1,23 @@
 // Helpers para pruebas de registro de empleado
-
-function validarRegistroEmpleado(nuevoEmpleado) {
+function validarEstado(estado) {
   const errors = [];
-
-  if (!nuevoEmpleado?.nombre?.trim()) {
-    errors.push("El nombre del empleado es obligatorio");
+  if (estado == null || estado === "") {
+    errors.push("Estado es obligatorio");
+    return errors;
   }
-  if (!nuevoEmpleado?.apellido?.trim()) {
-    errors.push("El apellido del empleado es obligatorio");
+  // Validar que sea boolean o string "true"/"false"
+  if (typeof estado !== "boolean" && 
+      (String(estado).toLowerCase() !== "true" && String(estado).toLowerCase() !== "false")) {
+    errors.push("Estado debe ser true o false");
   }
-  if (!nuevoEmpleado?.cargo?.trim()) {
-    errors.push("El cargo del empleado es obligatorio");
-  }
-
   return errors;
 }
-
-function prepararEmpleadoParaRegistro(nuevoEmpleado) {
+function construirEmpleado(estado) {
   return {
-    nombre: nuevoEmpleado.nombre?.trim() || "",
-    apellido: nuevoEmpleado.apellido?.trim() || "",
-    cargo: nuevoEmpleado.cargo?.trim() || "",
+    estado: typeof estado === "boolean" ? estado : String(estado).toLowerCase() === "true",
   };
 }
-
 module.exports = {
-  validarRegistroEmpleado,
-  prepararEmpleadoParaRegistro,
+  validarEstado,
+  construirEmpleado,
 };

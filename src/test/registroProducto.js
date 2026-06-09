@@ -2,45 +2,39 @@ const { supabase } = require("../database/supabaseconfig");
 
 function validateProducto(producto) {
   const errors = [];
+  
   if (!producto) {
     errors.push("Producto inválido");
     return { valid: false, errors };
   }
 
-  if (!producto.nombre_p || String(producto.nombre_p).trim() === "") {
-    errors.push("El nombre es obligatorio");
+  // Validar PrecioC: decimal ≥ 0
+  if (producto.preciocompra == null || producto.preciocompra === "") {
+    errors.push("PrecioC es obligatorio");
+  } else if (isNaN(Number(producto.preciocompra)) || Number(producto.preciocompra) < 0) {
+    errors.push("PrecioC debe ser un decimal ≥ 0");
   }
 
-  if (!producto.descripcion || String(producto.descripcion).trim() === "") {
-    errors.push("La descripción es obligatoria");
+  // Validar PrecioV: decimal ≥ 0
+  if (producto.precioventa == null || producto.precioventa === "") {
+    errors.push("PrecioV es obligatorio");
+  } else if (isNaN(Number(producto.precioventa)) || Number(producto.precioventa) < 0) {
+    errors.push("PrecioV debe ser un decimal ≥ 0");
   }
 
-  if (
-    producto.cantidad == null ||
-    producto.cantidad === "" ||
-    Number(producto.cantidad) <= 0
-  ) {
-    errors.push("La cantidad debe ser un número positivo");
+  // Validar Cantidad: entero ≥ 0
+  if (producto.cantidad == null || producto.cantidad === "") {
+    errors.push("Cantidad es obligatoria");
+  } else if (!Number.isInteger(Number(producto.cantidad)) || Number(producto.cantidad) < 0) {
+    errors.push("Cantidad debe ser un entero ≥ 0");
   }
 
-  if (
-    producto.preciocompra == null ||
-    producto.preciocompra === "" ||
-    Number(producto.preciocompra) <= 0
-  ) {
-    errors.push("El precio de compra debe ser un número positivo");
-  }
-
-  if (
-    producto.precioventa == null ||
-    producto.precioventa === "" ||
-    Number(producto.precioventa) <= 0
-  ) {
-    errors.push("El precio de venta debe ser un número positivo");
-  }
-
-  if (!producto.archivo) {
-    errors.push("La imagen del producto es obligatoria");
+  // Validar disponible: true/false
+  if (producto.disponible == null || producto.disponible === "") {
+    errors.push("disponible es obligatorio");
+  } else if (typeof producto.disponible !== "boolean" && 
+             (String(producto.disponible).toLowerCase() !== "true" && String(producto.disponible).toLowerCase() !== "false")) {
+    errors.push("disponible debe ser true o false");
   }
 
   return { valid: errors.length === 0, errors };

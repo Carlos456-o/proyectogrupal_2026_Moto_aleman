@@ -1,45 +1,30 @@
 // Helpers para pruebas del flujo de actualización de clientes
 
-function validarClienteEdicion(clienteEditar) {
+function validarCedulaEdicion(cedula) {
   const errors = [];
 
-  if (!clienteEditar || typeof clienteEditar !== "object") {
-    errors.push("Cliente inválido");
+  if (!cedula || cedula === "") {
+    errors.push("Cédula es obligatoria");
     return errors;
   }
 
-  if (!clienteEditar.nombre1 || String(clienteEditar.nombre1).trim() === "") {
-    errors.push("El primer nombre del cliente es obligatorio");
-  }
+  // Formato: XXX-XXXXXX-XXXXK donde X es dígito y K es dígito o letra
+  const formatoValido = /^\d{3}-\d{6}-\d{4}[0-9A-Za-z]$/.test(cedula);
 
-  if (!clienteEditar.apellidos1 || String(clienteEditar.apellidos1).trim() === "") {
-    errors.push("El primer apellido del cliente es obligatorio");
+  if (!formatoValido) {
+    errors.push('Cédula debe tener el formato: 121-000000-0000X');
   }
 
   return errors;
 }
 
-function prepararDatosClienteActualizado(clienteEditar) {
-  if (!clienteEditar || typeof clienteEditar !== "object") {
-    return {
-      nombre1: "",
-      nombre2: "",
-      apellidos1: "",
-      apellidos2: "",
-      cedula: "",
-    };
-  }
-
+function construirCedulaActualizada(cedula) {
   return {
-    nombre1: String(clienteEditar.nombre1 || "").trim(),
-    nombre2: String(clienteEditar.nombre2 || "").trim(),
-    apellidos1: String(clienteEditar.apellidos1 || "").trim(),
-    apellidos2: String(clienteEditar.apellidos2 || "").trim(),
-    cedula: String(clienteEditar.cedula || "").trim(),
+    cedula: String(cedula || "").trim(),
   };
 }
 
 module.exports = {
-  validarClienteEdicion,
-  prepararDatosClienteActualizado,
+  validarCedulaEdicion,
+  construirCedulaActualizada,
 };
