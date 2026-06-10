@@ -4,9 +4,19 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 const TarjetaCatalogo = ({ producto, abrirDetalles }) => {
   const estadoDisponible = producto.disponible && producto.cantidad > 0;
+  
+  // Determinar clase de color basada en stock
+  let claseStock = "";
+  if (producto.cantidad > 10) {
+    claseStock = "stock-verde";
+  } else if (producto.cantidad > 0) {
+    claseStock = "stock-amarillo";
+  } else {
+    claseStock = "stock-rojo";
+  }
 
   return (
-    <Card className="tarjeta-catalogo shadow-sm border-0 h-100">
+    <Card className={`tarjeta-catalogo shadow-sm border-0 h-100 ${claseStock}`}>
       <div className="tarjeta-imagen-container">
         {producto.url_imagen ? (
           <img
@@ -49,9 +59,9 @@ const TarjetaCatalogo = ({ producto, abrirDetalles }) => {
             C$ <span className="numero-precio">{producto.precioventa?.toFixed(2)}</span>
           </div>
           <div className="stock-info">
-            {producto.cantidad > 5 ? (
+            {producto.cantidad > 10 ? (
               <span className="stock-disponible">
-                <i className="bi bi-check-circle me-1"></i>En stock
+                <i className="bi bi-check-circle me-1"></i>En stock ({producto.cantidad})
               </span>
             ) : producto.cantidad > 0 ? (
               <span className="stock-bajo">

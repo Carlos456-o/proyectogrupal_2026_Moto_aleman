@@ -845,6 +845,65 @@ body.white-page .btn-outline-danger {
   opacity: 0.7;
 }
 
+/* ===================== COLORES DE STOCK EN TARJETAS ===================== */
+
+.tarjeta-catalogo.stock-verde {
+  background-color: #f0f9f6 !important;
+}
+
+.tarjeta-catalogo.stock-verde .stock-info {
+  background-color: #28a745 !important;
+  color: white !important;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.tarjeta-catalogo.stock-verde .stock-disponible {
+  color: white !important;
+}
+
+.tarjeta-catalogo.stock-amarillo {
+  background-color: #fffbf0 !important;
+}
+
+.tarjeta-catalogo.stock-amarillo .stock-info {
+  background-color: #ffc107 !important;
+  color: #000 !important;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.tarjeta-catalogo.stock-amarillo .stock-bajo {
+  color: #000 !important;
+}
+
+.tarjeta-catalogo.stock-rojo {
+  background-color: #fdf8f8 !important;
+}
+
+.tarjeta-catalogo.stock-rojo .stock-info {
+  background-color: #dc3545 !important;
+  color: white !important;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.tarjeta-catalogo.stock-rojo .stock-agotado {
+  color: white !important;
+}
+
 /* ===================== MODAL DE DETALLES ===================== */
 
 .modal-catalogo .modal-content {
