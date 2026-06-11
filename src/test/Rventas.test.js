@@ -1,7 +1,7 @@
 const {
   validarVenta,
   construirVenta,
-} = require("./ventas");
+} = require("./Rventas");
 describe("CP-HF05 - Registro de venta y validación", () => {
   test("Debe validar que PrecioV sea decimal ≥ 0.00", () => {
     const venta = { precio_ven: -5, total_venta: 10, cantidad_ven: 2, disponible: true };
